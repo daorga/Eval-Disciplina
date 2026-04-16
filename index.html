@@ -426,11 +426,11 @@ function sC(v){
 function rD(){
   const mes=document.getElementById('dm').value;
   const q=(document.getElementById('dq').value||'').toLowerCase();
-  const cur=document.getElementById('dof').value;
+  // Repopulate office filter preserving selection
   const ofS=document.getElementById('dof');
+  const offF=ofS.value;
   ofS.innerHTML='<option value="">Todas las oficinas</option>';
-  DB.oficinas.forEach(o=>ofS.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
-  const offF=document.getElementById('dof').value;
+  DB.oficinas.forEach(o=>ofS.innerHTML+='<option value="'+o.id+'"'+(o.id===offF?' selected':'')+'>'+o.nombre+'</option>');
   const ejFiltrados=offF?DB.ejecutivos.filter(e=>e.oficina===offF):DB.ejecutivos;
   const ejIds=new Set(ejFiltrados.map(e=>e.id));
   const evsAll=DB.evaluaciones.filter(e=>e.mes===mes);
@@ -460,7 +460,6 @@ function rD(){
   if(chip==='truncos')lista=lista.filter(e=>em[e.id]&&!em[e.id].guardada);
   document.getElementById('tl').textContent='Ejecutivos ('+lista.length+')';
   let h='';
-  console.log('Lista para tabla:', lista.length, lista.map(e=>({id:e.id,nombre:e.nombre,oficina:e.oficina})));
   lista.forEach(ej=>{
     const ev=em[ej.id];
     const prev=gPrev(ej.id,mes);
