@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Disciplina Comercial</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F5F4F0;--surface:#FFF;--s2:#EFEDE8;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.14);--t:#1A1916;--t2:#6B6860;--t3:#9E9C97;--acc:#1A1916;--gn:#1A7A52;--gn2:#E8F5EE;--am:#8A5C00;--am2:#FDF3DC;--rd:#A52A2A;--rd2:#FAEAEA;--pu:#4A2A8A;--pu2:#F0EAFA;--r:12px;--rs:8px;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--t);font-size:14px;line-height:1.5;min-height:100vh;}
+.nav{background:var(--surface);border-bottom:1px solid var(--bd);padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;}
+.nb{font-size:15px;font-weight:600;letter-spacing:-.3px;}.nb span{color:var(--t3);font-weight:400;}
+.nt{display:flex;gap:4px;}
+.ntb{padding:6px 14px;border-radius:6px;border:none;background:transparent;color:var(--t2);font-family:inherit;font-size:13px;cursor:pointer;transition:all .15s;}
+.ntb:hover{background:var(--s2);color:var(--t);}
+.ntb.active{background:var(--acc);color:#fff;}
+.vw{display:none;padding:28px 24px;max-width:1100px;margin:0 auto;}
+.vw.active{display:block;}
+.pt{font-size:22px;font-weight:600;letter-spacing:-.4px;margin-bottom:4px;}
+.ps{font-size:13px;color:var(--t2);margin-bottom:24px;}
+.sr{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px;margin-bottom:24px;}
+.sc{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:16px 18px;}
+.sv{font-size:28px;font-weight:600;line-height:1;margin-bottom:4px;}.sl{font-size:12px;color:var(--t3);}
+.sc.g .sv{color:var(--gn);}.sc.a .sv{color:var(--am);}.sc.r .sv{color:var(--rd);}
+.rb{display:flex;align-items:center;gap:8px;margin-top:6px;}
+.rbt{flex:1;height:4px;background:var(--s2);border-radius:2px;overflow:hidden;}
+.rbf{height:100%;border-radius:2px;transition:width .4s;}
+.rp{font-size:11px;color:var(--t2);min-width:30px;text-align:right;font-family:'DM Mono',monospace;}
+.tw{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;}
+.th2{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.tt{font-size:14px;font-weight:600;}
+.inp{padding:6px 12px;border:1px solid var(--bd2);border-radius:6px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--t);outline:none;}
+.inp:focus{border-color:var(--t);}
+.sel{padding:6px 10px;border:1px solid var(--bd2);border-radius:6px;font-family:inherit;font-size:13px;background:var(--bg);color:var(--t);outline:none;cursor:pointer;}
+table{width:100%;border-collapse:collapse;}
+th{padding:9px 16px;text-align:left;font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.06em;border-bottom:1px solid var(--bd);background:var(--bg);}
+td{padding:11px 16px;border-bottom:1px solid var(--bd);font-size:13px;}
+tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
+.badge{display:inline-flex;align-items:center;font-size:11px;font-weight:500;padding:2px 8px;border-radius:20px;white-space:nowrap;}
+.bg{background:var(--gn2);color:var(--gn);}.ba{background:var(--am2);color:var(--am);}.br{background:var(--rd2);color:var(--rd);}.bgr{background:var(--s2);color:var(--t2);}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:6px;border:1px solid var(--bd2);background:transparent;font-family:inherit;font-size:13px;color:var(--t);cursor:pointer;transition:all .15s;}
+.btn:hover{background:var(--s2);}
+.btn-p{background:var(--acc);color:#fff;border-color:var(--acc);}.btn-p:hover{background:#333;border-color:#333;}
+.btn-sm{padding:4px 10px;font-size:12px;}
+.mov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:200;align-items:center;justify-content:center;padding:20px;}
+.mov.open{display:flex;}
+.mo{background:var(--surface);border-radius:var(--r);width:100%;max-width:480px;max-height:90vh;overflow-y:auto;}
+.moh{padding:20px 24px 16px;border-bottom:1px solid var(--bd);display:flex;align-items:flex-start;justify-content:space-between;position:sticky;top:0;background:var(--surface);z-index:1;}
+.mot{font-size:16px;font-weight:600;}.mos{font-size:12px;color:var(--t2);margin-top:2px;}
+.mox{background:none;border:none;font-size:18px;cursor:pointer;color:var(--t2);padding:2px 6px;border-radius:4px;}
+.mox:hover{background:var(--s2);}
+.mob{padding:20px 24px;}.mof{padding:16px 24px;border-top:1px solid var(--bd);display:flex;justify-content:flex-end;gap:8px;}
+.cb{border:1px solid var(--bd);border-radius:var(--rs);margin-bottom:10px;overflow:hidden;}
+.ch{display:flex;align-items:center;gap:10px;padding:11px 14px;cursor:pointer;user-select:none;}
+.ch:hover{background:var(--bg);}
+.cpts{font-size:11px;font-weight:600;background:var(--s2);padding:2px 7px;border-radius:4px;color:var(--t2);font-family:'DM Mono',monospace;flex-shrink:0;}
+.cn{font-size:13px;font-weight:500;flex:1;}
+.csco{font-size:12px;font-weight:600;font-family:'DM Mono',monospace;}
+.ccv{font-size:10px;color:var(--t3);transition:transform .2s;}
+.ccv.open{transform:rotate(90deg);}
+.cbody{display:none;padding:0 14px 12px;}
+.cbody.open{display:block;}
+.er{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid var(--bd);cursor:pointer;}
+.er:last-of-type{border-bottom:none;}
+.eck{width:16px;height:16px;border:1.5px solid var(--bd2);border-radius:4px;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.eck.on{background:var(--gn);border-color:var(--gn);}
+.eck.on::after{content:'\2713';font-size:10px;color:#fff;font-weight:700;}
+.etxt{font-size:12px;color:var(--t2);flex:1;line-height:1.4;}
+.etag{font-size:10px;font-weight:500;padding:1px 6px;border-radius:20px;flex-shrink:0;margin-top:2px;}
+.etag.fija{background:var(--gn2);color:var(--gn);}.etag.rot{background:var(--pu2);color:var(--pu);}
+.epts{font-size:11px;color:var(--t3);flex-shrink:0;margin-top:2px;font-family:'DM Mono',monospace;}
+.bw{background:var(--bg);border-radius:var(--rs);padding:10px 12px;margin:4px 0 6px 26px;}
+.bh{font-size:11px;color:var(--t3);margin-bottom:6px;display:flex;align-items:center;justify-content:space-between;}
+.bo{display:flex;align-items:flex-start;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);cursor:pointer;font-size:12px;color:var(--t2);}
+.bo:last-child{border-bottom:none;}.bo.sel{color:var(--t);font-weight:500;}
+/* brad handled inline in JS */
+.brd{font-size:11px;padding:2px 8px;border:1px solid var(--bd2);border-radius:4px;background:var(--surface);cursor:pointer;font-family:inherit;color:var(--t2);}
+.brd:hover{background:var(--s2);}
+.pb{height:3px;background:var(--s2);border-radius:2px;margin-top:10px;overflow:hidden;}
+.pf{height:100%;border-radius:2px;transition:width .3s;}
+.ss{background:var(--bg);border-radius:var(--rs);padding:14px 16px;margin-bottom:16px;display:flex;align-items:center;gap:20px;flex-wrap:wrap;}
+.sn{font-size:32px;font-weight:600;font-family:'DM Mono',monospace;line-height:1;}
+.mb{flex:1;min-width:180px;}
+.mr{display:flex;align-items:center;gap:8px;margin-bottom:4px;font-size:11px;color:var(--t2);}
+.ml{width:130px;flex-shrink:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mt{flex:1;height:4px;background:var(--s2);border-radius:2px;overflow:hidden;}
+.mf{height:100%;border-radius:2px;transition:width .3s;}
+.mp{width:28px;text-align:right;font-family:'DM Mono',monospace;font-size:10px;}
+.ec{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.eh{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+.en{font-size:15px;font-weight:600;flex:1;}.eof{font-size:12px;color:var(--t2);}
+.emo{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;}
+.em{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.ebw{width:36px;height:80px;background:var(--bg);border-radius:4px;display:flex;align-items:flex-end;overflow:hidden;}
+.eb{width:100%;border-radius:4px 4px 0 0;}
+.ev{font-size:11px;font-weight:600;font-family:'DM Mono',monospace;}
+.em2{font-size:10px;color:var(--t3);}
+.oc{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:12px;}
+.ab{background:var(--rd2);border:1px solid rgba(165,42,42,.2);border-radius:var(--rs);padding:10px 14px;margin-bottom:10px;font-size:12px;color:var(--rd);}
+.as{background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);margin-bottom:16px;overflow:hidden;}
+.ash{padding:14px 18px;border-bottom:1px solid var(--bd);display:flex;align-items:center;justify-content:space-between;}
+.ast{font-size:14px;font-weight:600;}
+.ai{display:flex;align-items:center;gap:12px;padding:10px 18px;border-bottom:1px solid var(--bd);}
+.ai:last-child{border-bottom:none;}
+.ed{border:none;background:transparent;font-family:inherit;font-size:13px;color:var(--t);outline:none;flex:1;padding:2px 4px;border-radius:4px;}
+.ed:focus{background:var(--bg);}
+.empty{padding:40px;text-align:center;color:var(--t3);font-size:13px;}
+.fr{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:20px;}
+.chip{padding:5px 12px;border-radius:20px;border:1px solid var(--bd2);background:var(--surface);font-size:12px;cursor:pointer;color:var(--t2);transition:all .15s;font-family:inherit;}
+.chip.active{background:var(--acc);color:#fff;border-color:var(--acc);}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nb">Disciplina <span>Comercial</span></div>
+  <div class="nt">
+    <button class="ntb active" onclick="sv('dashboard')">Dashboard</button>
+    <button class="ntb" onclick="sv('evaluar')">Evaluar</button>
+    <button class="ntb" onclick="sv('evolucion')">Evolucion</button>
+    <button class="ntb" onclick="sv('oficinas')">Por oficina</button>
+    <button class="ntb" onclick="sv('admin')">Administracion</button>
+  </div>
+  <div style="font-size:13px;color:var(--t2)">Cuarto de Control</div>
+</nav>
+
+<div class="vw active" id="vw-dashboard">
+  <div class="pt" id="dt">Dashboard</div><div class="ps" id="ds"></div>
+  <div class="fr">
+    <select class="sel" id="dm" onchange="rD()">
+      <option value="2025-01">Ene 2025</option><option value="2025-02">Feb 2025</option><option value="2025-03">Mar 2025</option><option value="2025-04">Abr 2025</option><option value="2025-05">May 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Ago 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Oct 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dic 2025</option>
+      <option value="2026-01">Ene 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mar 2026</option><option value="2026-04">Abr 2026</option><option value="2026-05">May 2026</option><option value="2026-06">Jun 2026</option><option value="2026-07">Jul 2026</option><option value="2026-08">Ago 2026</option><option value="2026-09">Sep 2026</option><option value="2026-10">Oct 2026</option><option value="2026-11">Nov 2026</option><option value="2026-12">Dic 2026</option>
+    </select>
+    <button class="chip active" id="chip-todos" onclick="sC('todos')">Todos</button>
+    <button class="chip" id="chip-evaluados" onclick="sC('evaluados')">Evaluados</button>
+    <button class="chip" id="chip-pendientes" onclick="sC('pendientes')">Pendientes</button>
+    <button class="chip" id="chip-truncos" onclick="sC('truncos')">Sin cerrar</button>
+    <select class="sel" id="dof" onchange="rD()"><option value="">Todas las oficinas</option></select>
+    <input class="inp" placeholder="Buscar ejecutivo..." oninput="rD()" id="dq" style="width:190px">
+  </div>
+  <div class="sr" id="sr"></div>
+  <div class="tw"><div class="th2"><span class="tt" id="tl">Ejecutivos</span></div>
+    <table><thead><tr><th>Ejecutivo</th><th>Oficina</th><th>Score anterior</th><th>Este mes</th><th>Accion</th></tr></thead><tbody id="etb"></tbody></table>
+  </div>
+</div>
+
+<div class="vw" id="vw-evaluar">
+  <div class="pt">Evaluar ejecutivo</div>
+  <div class="ps">Si ya existe evaluacion del mes seleccionado, se carga automaticamente con sus checks</div>
+  <div style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+    <div style="flex:1;min-width:180px;"><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Ejecutivo</label>
+      <select class="sel" style="width:100%;" id="eej" onchange="lE()"><option value="">Selecciona</option></select></div>
+    <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Mes</label>
+      <select class="sel" id="emes" onchange="lE()">
+      <option value="2025-01">Ene 2025</option><option value="2025-02">Feb 2025</option><option value="2025-03">Mar 2025</option><option value="2025-04">Abr 2025</option><option value="2025-05">May 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Ago 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Oct 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dic 2025</option>
+      <option value="2026-01">Ene 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mar 2026</option><option value="2026-04">Abr 2026</option><option value="2026-05">May 2026</option><option value="2026-06">Jun 2026</option><option value="2026-07">Jul 2026</option><option value="2026-08">Ago 2026</option><option value="2026-09">Sep 2026</option><option value="2026-10">Oct 2026</option><option value="2026-11">Nov 2026</option><option value="2026-12">Dic 2026</option>
+    </select></div>
+    <div style="flex:1;min-width:180px;"><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Notas</label>
+      <input class="inp" style="width:100%;" placeholder="Observaciones opcionales..." id="enotas"></div>
+  </div>
+  <div id="ewrap" style="display:none;">
+    <div class="ss">
+      <div><div class="sn" id="esn" style="color:var(--t3);">0</div><div style="font-size:12px;color:var(--t2);margin-top:2px;">puntos de 100</div>
+        <div style="display:flex;align-items:center;gap:6px;margin-top:6px;" id="esem"><div style="width:8px;height:8px;border-radius:50%;background:var(--t3);"></div><span style="font-size:12px;color:var(--t3);">Sin evaluar</span></div>
+      </div>
+      <div class="mb" id="emb"></div>
+      <div id="eprev" style="font-size:12px;color:var(--t2);"></div>
+    </div>
+    <div id="ecrits"></div>
+    <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
+      <button class="btn" onclick="resetE()">Reiniciar</button>
+      <button class="btn btn-p" onclick="guardar()">Guardar evaluacion</button>
+    </div>
+  </div>
+  <div id="eempty" class="empty">Selecciona un ejecutivo para cargar el scorecard</div>
+</div>
+
+<div class="vw" id="vw-evolucion">
+  <div class="pt">Evolucion por ejecutivo</div><div class="ps">Historial de scores mes a mes</div>
+  <div class="fr">
+    <input class="inp" placeholder="Buscar ejecutivo..." oninput="rEvo()" id="evq" style="width:220px;">
+    <select class="sel" onchange="rEvo()" id="evof"><option value="">Todas las oficinas</option></select>
+  </div>
+  <div id="evlist"></div>
+</div>
+
+<div class="vw" id="vw-oficinas">
+  <div class="pt">Disciplina por oficina</div>
+  <div class="ps">Score promedio del equipo y alertas cuando la mayoria tiene bajo desempeno en un criterio</div>
+  <div class="fr">
+    <select class="sel" id="ofm" onchange="rOf()">
+      <option value="2025-01">Ene 2025</option><option value="2025-02">Feb 2025</option><option value="2025-03">Mar 2025</option><option value="2025-04">Abr 2025</option><option value="2025-05">May 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Ago 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Oct 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dic 2025</option>
+      <option value="2026-01">Ene 2026</option><option value="2026-02">Feb 2026</option><option value="2026-03">Mar 2026</option><option value="2026-04">Abr 2026</option><option value="2026-05">May 2026</option><option value="2026-06">Jun 2026</option><option value="2026-07">Jul 2026</option><option value="2026-08">Ago 2026</option><option value="2026-09">Sep 2026</option><option value="2026-10">Oct 2026</option><option value="2026-11">Nov 2026</option><option value="2026-12">Dic 2026</option>
+    </select>
+    <label style="font-size:12px;color:var(--t2);display:flex;align-items:center;gap:6px;">
+      Alerta si: <input type="number" id="ofu" value="50" min="10" max="90" class="inp" style="width:54px;" onchange="rOf()"> % del equipo tiene criterio bajo 50%
+    </label>
+  </div>
+  <div id="ofv"></div>
+</div>
+
+<div class="vw" id="vw-admin">
+  <div class="pt">Administracion</div><div class="ps">Haz clic en cualquier texto para editarlo directamente</div>
+  <div class="as"><div class="ash"><span class="ast">Oficinas</span><button class="btn btn-sm" onclick="addOf()">+ Agregar</button></div><div id="adof"></div></div>
+  <div class="as"><div class="ash"><span class="ast">Ejecutivos</span><button class="btn btn-sm" onclick="openAE()">+ Agregar</button></div><div id="adej"></div></div>
+  <div class="as"><div class="ash"><span class="ast">Criterios y banco de preguntas</span></div><div id="adcr"></div></div>
+</div>
+
+<div class="mov" id="msaved">
+  <div class="mo"><div class="moh"><div><div class="mot">Evaluacion guardada</div><div class="mos" id="mss"></div></div><button class="mox" onclick="cM('msaved')">x</button></div>
+    <div class="mob" id="msb"></div>
+    <div class="mof"><button class="btn btn-p" onclick="cM('msaved');sv('dashboard')">Ir al dashboard</button></div>
+  </div>
+</div>
+
+<div class="mov" id="maej">
+  <div class="mo" style="max-width:400px;"><div class="moh"><div><div class="mot">Nuevo ejecutivo</div></div><button class="mox" onclick="cM('maej')">x</button></div>
+    <div class="mob">
+      <div style="margin-bottom:14px;"><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Nombre completo</label><input class="inp" style="width:100%;" id="nejn" placeholder="Ej: Maria Garcia Lopez"></div>
+      <div><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Oficina</label><select class="sel" style="width:100%;" id="nejof"></select></div>
+    </div>
+    <div class="mof"><button class="btn" onclick="cM('maej')">Cancelar</button><button class="btn btn-p" onclick="sNE()">Guardar</button></div>
+  </div>
+</div>
+
+<script>
+const USE_SUPABASE=true,SUPABASE_URL='https://qdqztmaupkfruhrkadpb.supabase.co',SUPABASE_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFkcXp0bWF1cGtmcnVocmthZHBiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNjA1NjIsImV4cCI6MjA5MTkzNjU2Mn0.9rrLL-uNa1bC462rCYFqfmPjXXNbjlDL8noy85zdkMs';
+const MN=['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+const CC=['#1A7A52','#1A4A8A','#8A5C00','#8A1A1A','#4A2A8A','#D4537E'];
+let chip='todos';
+
+let DB=JSON.parse(localStorage.getItem('dc_db')||'null')||{
+  oficinas:[{id:'o1',nombre:'Monterrey Norte'},{id:'o2',nombre:'Monterrey Sur'},{id:'o3',nombre:'Guadalajara Centro'},{id:'o4',nombre:'CDMX Insurgentes'},{id:'o5',nombre:'CDMX Santa Fe'},{id:'o6',nombre:'Puebla'},{id:'o7',nombre:'Leon'},{id:'o8',nombre:'Queretaro'},{id:'o9',nombre:'Tijuana'},{id:'o10',nombre:'Hermosillo'}],
+  ejecutivos:[{id:'e1',nombre:'Ana Martinez',oficina:'o1'},{id:'e2',nombre:'Carlos Reyes',oficina:'o1'},{id:'e3',nombre:'Sofia Torres',oficina:'o2'},{id:'e4',nombre:'Javier Medina',oficina:'o2'},{id:'e5',nombre:'Laura Sanchez',oficina:'o3'},{id:'e6',nombre:'Roberto Cruz',oficina:'o3'},{id:'e7',nombre:'Patricia Vargas',oficina:'o4'},{id:'e8',nombre:'Miguel Angel Flores',oficina:'o4'},{id:'e9',nombre:'Daniela Lopez',oficina:'o5'},{id:'e10',nombre:'Fernando Gomez',oficina:'o5'},{id:'e11',nombre:'Valeria Hernandez',oficina:'o6'},{id:'e12',nombre:'Andres Castillo',oficina:'o7'}],
+  evaluaciones:[
+    {id:'ev1',ejecutivo:'e1',mes:'2025-03',score:72,criterios:[80,60,70,100,80,50],notas:'',guardada:true,detalle:[[true,false,true,true],[true,false,true,false],[true,true,false],[true,true,false,false],[true,true,false,true],[false,true,false,true]]},
+    {id:'ev2',ejecutivo:'e1',mes:'2025-04',score:81,criterios:[90,80,70,100,80,65],notas:'',guardada:true,detalle:[[true,true,true,true],[true,true,true,false],[true,true,false],[true,true,true,false],[true,true,true,false],[false,true,true,true]]},
+    {id:'ev3',ejecutivo:'e2',mes:'2025-04',score:68,criterios:[70,70,50,80,70,70],notas:'',guardada:true,detalle:[[true,false,true,true],[true,true,true,false],[true,false,false],[true,true,true,false],[true,false,true,true],[true,true,false,true]]},
+    {id:'ev4',ejecutivo:'e5',mes:'2025-04',score:90,criterios:[100,90,90,100,80,80],notas:'Excelente',guardada:true,detalle:[[true,true,true,true],[true,true,true,true],[true,true,true],[true,true,true,true],[true,true,true,false],[true,true,true,true]]},
+    {id:'ev5',ejecutivo:'e7',mes:'2025-04',score:45,criterios:[40,50,30,60,40,55],notas:'Primer mes',guardada:true,detalle:[[false,true,false,true],[true,false,false,true],[false,false,true],[true,false,true,false],[false,true,false,false],[true,false,false,true]]},
+    {id:'ev6',ejecutivo:'e9',mes:'2025-04',score:77,criterios:[80,80,60,80,80,80],notas:'',guardada:true,detalle:[[true,true,true,false],[true,true,true,false],[true,false,true],[true,true,true,false],[true,true,false,true],[true,true,true,false]]},
+    {id:'ev7',ejecutivo:'e3',mes:'2025-05',score:null,criterios:null,notas:'',guardada:false,detalle:null}
+  ],
+  criterios:[
+    {id:'c1',nombre:'Uso de data para decisiones',peso:20,evidencias:[
+      {texto:'Puede mostrar un dashboard que consulto esta semana',tipo:'rotativa',pts:5,banco:['Cuanto lleva de cumplimiento al presupuesto en el mes en % y en $?','Que agentes no estan emitiendo en el mes?','Cual es el presupuesto de X agente en el mes?','Cual es el presupuesto de X agente acumulado?','Cuanto ha crecido o decrecido X agente a mes vencido?','Del cumplimiento al presupuesto de X agente cuanto lleva por ramo?','Que agentes tienen prima negativa en el mes?']},
+      {texto:'Identifica los agentes con decremento vs año anterior y sabe cuantos son',tipo:'fija',pts:5,banco:[]},
+      {texto:'Tomo una accion concreta basada en un dato esta semana (puede describir cual y que hizo)',tipo:'fija',pts:5,banco:[]},
+      {texto:'No necesita que alguien mas le interprete los datos; lo hace solo',tipo:'rotativa',pts:5,banco:['Sabe que puede ver en cada seccion del cuadro de mando?','Como se lee el primer grafico de la segunda fila?','Como puedo saber que agentes ya son productivos?','Cuantos agentes ya te emitieron mas de $450,000?','Cuantos agentes te han emitido en lo que va del año?','Cuantos agentes te han vendido GMM en el mes?']}
+    ]},
+    {id:'c2',nombre:'Seguimiento de agentes activos',peso:20,evidencias:[
+      {texto:'Sabe el numero exacto de agentes activos de su cartera hoy en el mes',tipo:'fija',pts:5,banco:[]},
+      {texto:'Sabe que agentes no le han emitido en el mes',tipo:'fija',pts:5,banco:[]},
+      {texto:'Sabe que agentes no le han emitido en el año',tipo:'fija',pts:5,banco:[]},
+      {texto:'Ejecuto al menos una accion de reactivacion en los ultimos 15 dias (puede evidenciarlo)',tipo:'fija',pts:5,banco:[]}
+    ]},
+    {id:'c3',nombre:'Tuberias',peso:9,evidencias:[
+      {texto:'Sabe ingresar a las tuberias de flotillas y danos desde cuadro de mando',tipo:'rotativa',pts:3,banco:['Sabe poner los filtros en las tuberias?','Cuantos negocios y que valor tienen los liberados en los ultimos 15 dias?','Cuantos negocios liberados tiene por producto?','Que negocios tiene de mas de $100,000?']},
+      {texto:'Tiene negocios solo vigentes en las tuberias (cuestionar 4 y todos deben seguir vivos)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Ha enviado al BOT folios para cerrar, mostrar evidencia del correo',tipo:'fija',pts:3,banco:[]}
+    ]},
+    {id:'c4',nombre:'Reuniones con gerente',peso:11,evidencias:[
+      {texto:'Las reuniones estan agendadas recurrentemente (puede mostrar el calendario)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Que planes de accion se definieron (puede mostrar evidencia)',tipo:'fija',pts:3,banco:[]},
+      {texto:'La reunion de esta semana ya ocurrio (o tiene fecha confirmada)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Los planes de accion ya fueron actualizados con su estatus',tipo:'fija',pts:2,banco:[]}
+    ]},
+    {id:'c5',nombre:'Proyeccion de cierre',peso:20,evidencias:[
+      {texto:'Conoce y sabe leer el archivo de proyeccion',tipo:'fija',pts:5,banco:[]},
+      {texto:'Tiene una proyeccion documentada para el mes (no de memoria)',tipo:'fija',pts:5,banco:[]},
+      {texto:'La proyeccion especifica los negocios a cerrar',tipo:'fija',pts:5,banco:[]},
+      {texto:'Se tienen planes de accion especificos si la proyeccion es menos del 100%',tipo:'fija',pts:5,banco:[]}
+    ]},
+    {id:'c6',nombre:'Plan de visitas',peso:20,evidencias:[
+      {texto:'Tiene un plan de visitas documentado para la semana actual (antes de que empiece)',tipo:'fija',pts:5,banco:[]},
+      {texto:'Uso de dashboards en visitas',tipo:'rotativa',pts:5,banco:['Puede mostrar como usaria el cuadro de mando en una visita con un agente filtrandolo','Puede mostrar como usaria la tuberia de flotillas en una visita con un agente filtrandolo','Puede mostrar como usaria la tuberia de danos en una visita con un agente filtrandolo']},
+      {texto:'Cada visita planeada tiene objetivo definido (no solo nombre del cliente)',tipo:'fija',pts:5,banco:[]},
+      {texto:'Puede ligar como una visita esta ligada a data de algun dashboard',tipo:'fija',pts:5,banco:[]}
+    ]}
+  ]
+};
+function save(){localStorage.setItem('dc_db',JSON.stringify(DB));}
+
+// ── SUPABASE SYNC ─────────────────────────────────────────────────────────
+let SB = null;
+if(USE_SUPABASE){
+  try {
+    // supabase-js v2 CDN exposes window.supabase = { createClient }
+    const _lib = window.supabase || window.Supabase;
+    SB = _lib.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log('Supabase client creado OK');
+  } catch(e){ console.error('Error creando cliente Supabase:', e); }
+}
+
+async function sbInit(){
+  if(!SB) return;
+  console.log('Conectando a Supabase...');
+  try {
+    // 1. Oficinas
+    const {data:ofs, error:eOf} = await SB.from('oficinas').select('id,nombre').order('nombre');
+    if(eOf) throw eOf;
+    if(ofs && ofs.length){
+      DB.oficinas = ofs.map(o=>({id:o.id, nombre:o.nombre}));
+      console.log('Oficinas cargadas:', DB.oficinas.length);
+    }
+
+    // 2. Ejecutivos
+    const {data:ejs, error:eEj} = await SB.from('ejecutivos').select('id,nombre,oficina_id').eq('activo',true).order('nombre');
+    if(eEj) throw eEj;
+    if(ejs && ejs.length){
+      DB.ejecutivos = ejs.map(e=>({id:e.id, nombre:e.nombre, oficina:e.oficina_id}));
+      console.log('Ejecutivos cargados:', DB.ejecutivos.length);
+    }
+
+    // 3. Evaluaciones
+    const {data:evs, error:eEv} = await SB.from('evaluaciones').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
+    if(eEv) throw eEv;
+    if(evs && evs.length){
+      DB.evaluaciones = evs.map(ev=>({
+        id: ev.id,
+        ejecutivo: ev.ejecutivo_id,
+        mes: ev.mes,
+        score: ev.score,
+        criterios: ev.scores_criterios,
+        notas: ev.notas||'',
+        guardada: ev.guardada,
+        detalle: ev.detalle_checks||null,
+        bancos: ev.bancos_sel||null
+      }));
+      console.log('Evaluaciones cargadas:', DB.evaluaciones.length);
+    } else {
+      DB.evaluaciones = [];
+    }
+
+    save();
+    rD();
+    lES();
+    console.log('Supabase conectado OK');
+  } catch(e){
+    console.error('Error Supabase detalle:', JSON.stringify(e), e.message, e.code, e.details);
+    alert('Error Supabase: ' + (e.message||e.code||JSON.stringify(e)));
+  }
+}
+
+async function sbSaveEval(obj){
+  if(!SB) return;
+  try {
+    const {data, error} = await SB.from('evaluaciones').upsert({
+      ejecutivo_id: obj.ejecutivo,
+      mes: obj.mes,
+      score: obj.score,
+      scores_criterios: obj.criterios,
+      notas: obj.notas,
+      guardada: obj.guardada,
+      evaluador: 'Cuarto de Control',
+      detalle_checks: obj.detalle,
+      bancos_sel: obj.bancos
+    }, {onConflict:'ejecutivo_id,mes'}).select('id').single();
+    if(error) throw error;
+    const idx = DB.evaluaciones.findIndex(e=>e.ejecutivo===obj.ejecutivo&&e.mes===obj.mes);
+    if(idx>=0) DB.evaluaciones[idx].id = data.id;
+    save();
+    console.log('Evaluacion guardada en Supabase:', data.id);
+  } catch(e){
+    console.error('Error guardando evaluacion:', e);
+    alert('Error al guardar en Supabase: '+(e.message||JSON.stringify(e)));
+  }
+}
+
+async function sbSaveOficina(id, nombre){
+  if(!SB) return;
+  const {error} = await SB.from('oficinas').update({nombre}).eq('id',id);
+  if(error) console.error('Error update oficina:', error);
+}
+
+async function sbSaveEjecutivo(id, nombre, oficina_id){
+  if(!SB) return;
+  const {error} = await SB.from('ejecutivos').update({nombre, oficina_id}).eq('id',id);
+  if(error) console.error('Error update ejecutivo:', error);
+}
+
+async function sbAddOficina(nombre){
+  if(!SB) return null;
+  const {data,error} = await SB.from('oficinas').insert({nombre}).select('id').single();
+  if(error){ console.error(error); return null; }
+  return data.id;
+}
+
+async function sbAddEjecutivo(nombre, oficina_id){
+  if(!SB) return null;
+  const {data,error} = await SB.from('ejecutivos').insert({nombre, oficina_id}).select('id').single();
+  if(error){ console.error(error); return null; }
+  return data.id;
+}
+function gOf(id){return DB.oficinas.find(o=>o.id===id)||{nombre:'?'};}
+function gEj(id){return DB.ejecutivos.find(e=>e.id===id)||{nombre:'?'};}
+function gEv(ejId,mes){return DB.evaluaciones.find(e=>e.ejecutivo===ejId&&e.mes===mes);}
+function gPrev(ejId,mes){return DB.evaluaciones.filter(e=>e.ejecutivo===ejId&&e.mes<mes&&e.guardada).sort((a,b)=>b.mes.localeCompare(a.mes))[0];}
+function mL(m){const[y,mo]=m.split('-');return MN[parseInt(mo)-1]+' '+y;}
+function sc(s){return s>=80?'#1A7A52':s>=60?'#8A5C00':'#A52A2A';}
+function sBd(s){
+  if(s===undefined||s===null)return'<span class="badge bgr">Sin evaluar</span>';
+  if(s>=80)return'<span class="badge bg">'+s+' - Solida</span>';
+  if(s>=60)return'<span class="badge ba">'+s+' - En desarrollo</span>';
+  return'<span class="badge br">'+s+' - Atencion</span>';
+}
+
+function sv(id){
+  document.querySelectorAll('.vw').forEach(v=>v.classList.remove('active'));
+  document.querySelectorAll('.ntb').forEach(t=>t.classList.remove('active'));
+  document.getElementById('vw-'+id).classList.add('active');
+  document.querySelectorAll('.ntb').forEach(t=>{if(t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active');});
+  if(id==='dashboard')rD();
+  if(id==='evolucion')rEvo();
+  if(id==='oficinas')rOf();
+  if(id==='admin')rAdmin();
+}
+
+function sC(v){
+  chip=v;
+  ['todos','evaluados','pendientes','truncos'].forEach(c=>document.getElementById('chip-'+c).classList.toggle('active',c===v));
+  rD();
+}
+
+function rD(){
+  const mes=document.getElementById('dm').value;
+  const of=document.getElementById('dof').value;
+  const q=(document.getElementById('dq').value||'').toLowerCase();
+  const cur=document.getElementById('dof').value;
+  const ofS=document.getElementById('dof');
+  ofS.innerHTML='<option value="">Todas las oficinas</option>';
+  DB.oficinas.forEach(o=>ofS.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
+  const evs=DB.evaluaciones.filter(e=>e.mes===mes);
+  const em={};evs.forEach(e=>{em[e.ejecutivo]=e;});
+  const tot=DB.ejecutivos.length;
+  const evd=evs.filter(e=>e.guardada).length;
+  const tr=evs.filter(e=>!e.guardada).length;
+  const pend=tot-evd-tr;
+  const grd=evs.filter(e=>e.guardada);
+  const avg=grd.length?Math.round(grd.reduce((s,e)=>s+e.score,0)/grd.length):0;
+  const sol=grd.filter(e=>e.score>=80).length;
+  document.getElementById('dt').textContent='Dashboard - '+mL(mes);
+  document.getElementById('ds').textContent=evd+' de '+tot+' evaluados  |  '+tr+' sin cerrar  |  '+pend+' pendientes';
+  document.getElementById('sr').innerHTML=
+    '<div class="sc"><div class="sv">'+tot+'</div><div class="sl">Ejecutivos totales</div></div>'+
+    '<div class="sc g"><div class="sv">'+evd+'</div><div class="sl">Evaluados</div><div class="rb"><div class="rbt"><div class="rbf" style="width:'+Math.round(evd/tot*100)+'%;background:var(--gn)"></div></div><div class="rp">'+Math.round(evd/tot*100)+'%</div></div></div>'+
+    '<div class="sc a"><div class="sv">'+pend+'</div><div class="sl">Pendientes</div><div class="rb"><div class="rbt"><div class="rbf" style="width:'+Math.round(pend/tot*100)+'%;background:var(--am)"></div></div><div class="rp">'+Math.round(pend/tot*100)+'%</div></div></div>'+
+    '<div class="sc'+(tr>0?' a':'')+'"><div class="sv">'+tr+'</div><div class="sl">Sin cerrar</div></div>'+
+    '<div class="sc'+(avg>=80?' g':avg>=60?' a':avg>0?' r':'')+'"><div class="sv">'+(avg||'?')+'</div><div class="sl">Score promedio</div></div>'+
+    '<div class="sc g"><div class="sv">'+sol+'</div><div class="sl">Disciplina solida</div></div>';
+  let lista=DB.ejecutivos;
+  if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
+  if(of)lista=lista.filter(e=>e.oficina===of);
+  if(chip==='evaluados')lista=lista.filter(e=>em[e.id]&&em[e.id].guardada);
+  if(chip==='pendientes')lista=lista.filter(e=>!em[e.id]);
+  if(chip==='truncos')lista=lista.filter(e=>em[e.id]&&!em[e.id].guardada);
+  document.getElementById('tl').textContent='Ejecutivos ('+lista.length+')';
+  let h='';
+  lista.forEach(ej=>{
+    const ev=em[ej.id];
+    const prev=gPrev(ej.id,mes);
+    const pc=prev?'<span style="font-size:12px;color:var(--t2)">'+mL(prev.mes)+': <b>'+prev.score+'</b> pts</span>':'<span style="color:var(--t3);font-size:12px">Sin historial</span>';
+    const ec=ev?(ev.guardada?sBd(ev.score):'<span class="badge ba">Sin cerrar</span>'):'<span class="badge bgr">Pendiente</span>';
+    h+='<tr><td style="font-weight:500">'+ej.nombre+'</td><td>'+gOf(ej.oficina).nombre+'</td><td>'+pc+'</td><td>'+ec+'</td><td><button class="btn btn-sm" onclick="gE(\''+ej.id+'\',\''+mes+'\')">'+  (ev?'Ver / editar':'Evaluar')+'</button></td></tr>';
+  });
+  document.getElementById('etb').innerHTML=h||'<tr><td colspan="5" class="empty">Sin resultados</td></tr>';
+}
+
+let ES={c:[],b:[]};
+function lES(){
+  const sel=document.getElementById('eej');
+  sel.innerHTML='<option value="">Selecciona</option>';
+  DB.ejecutivos.forEach(e=>{sel.innerHTML+='<option value="'+e.id+'">'+e.nombre+' - '+gOf(e.oficina).nombre+'</option>';});
+}
+function gE(ejId,mes){sv('evaluar');document.getElementById('eej').value=ejId;if(mes)document.getElementById('emes').value=mes;lE();}
+function lE(){
+  const ejId=document.getElementById('eej').value;
+  const mes=document.getElementById('emes').value;
+  if(!ejId){document.getElementById('ewrap').style.display='none';document.getElementById('eempty').style.display='block';return;}
+  document.getElementById('eempty').style.display='none';
+  document.getElementById('ewrap').style.display='block';
+  ES.c=DB.criterios.map(c=>c.evidencias.map(()=>false));
+  ES.b=DB.criterios.map(c=>c.evidencias.map(e=>e.tipo==='rotativa'?0:-1));
+  const ex=gEv(ejId,mes);
+  if(ex&&ex.detalle){
+    ex.detalle.forEach((row,ci)=>{if(Array.isArray(row))row.forEach((v,ei)=>{if(ES.c[ci]&&ei<ES.c[ci].length)ES.c[ci][ei]=!!v;});});
+    if(ex.bancos)ex.bancos.forEach((row,ci)=>{if(Array.isArray(row))row.forEach((v,ei)=>{if(ES.b[ci]&&ei<ES.b[ci].length&&typeof v==='number')ES.b[ci][ei]=v;});});
+    document.getElementById('enotas').value=ex.notas||'';
+  }else{document.getElementById('enotas').value='';}
+  const prev=gPrev(ejId,mes);
+  document.getElementById('eprev').innerHTML=prev?'Previo: <b>'+mL(prev.mes)+'</b> '+sBd(prev.score):'Sin evaluaciones previas';
+  rESc();
+}
+function rESc(){
+  let h='';
+  DB.criterios.forEach((c,ci)=>{
+    let eh='';
+    c.evidencias.forEach((e,ei)=>{
+      const tag=e.tipo==='fija'?'<span class="etag fija">Fija</span>':'<span class="etag rot">Rotativa</span>';
+      let bh='';
+      if(e.tipo==='rotativa'&&e.banco.length){
+        const s0=ES.b[ci][ei]||0;
+        bh='<div class="bw"><div class="bh"><span>Pregunta del mes</span><button class="brd" onclick="rB('+ci+','+ei+')">Aleatoria</button></div>'+
+          e.banco.map((b,bi)=>'<div class="bo'+(bi===s0?' sel':'')+'" id="bo-'+ci+'-'+ei+'-'+bi+'" onclick="sB('+ci+','+ei+','+bi+')">'+ mkR(bi===s0,'br-'+ci+'-'+ei+'-'+bi) +'<span>'+b+'</span></div>').join('')+'</div>';
+      }
+      eh+='<div class="er" onclick="tC('+ci+','+ei+')"><div class="eck'+(ES.c[ci][ei]?' on':'')+'" id="eck-'+ci+'-'+ei+'"></div><span class="etxt">'+e.texto+'</span>'+tag+'<span class="epts">'+e.pts+'p</span></div>'+bh;
+    });
+    h+='<div class="cb"><div class="ch" onclick="tCr('+ci+')"><span class="cpts">'+c.peso+'p</span><span class="cn">'+c.nombre+'</span><span class="csco" id="cs-'+ci+'" style="color:var(--t3)">0%</span><span class="ccv" id="cv-'+ci+'">+</span></div><div class="cbody" id="cbd-'+ci+'">'+eh+'<div class="pb"><div class="pf" id="pf-'+ci+'" style="width:0%;background:'+CC[ci]+'"></div></div></div></div>';
+  });
+  document.getElementById('ecrits').innerHTML=h;
+  uS();
+}
+function tCr(ci){document.getElementById('cbd-'+ci).classList.toggle('open');const cv=document.getElementById('cv-'+ci);cv.textContent=document.getElementById('cbd-'+ci).classList.contains('open')?'-':'+';}
+function tC(ci,ei){ES.c[ci][ei]=!ES.c[ci][ei];const el=document.getElementById('eck-'+ci+'-'+ei);if(el)el.classList.toggle('on',ES.c[ci][ei]);uS();autoSave();}
+function autoSave(){
+  const ejId=document.getElementById('eej').value;
+  const mes=document.getElementById('emes').value;
+  if(!ejId)return;
+  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score:null,criterios:null,notas:document.getElementById('enotas').value,guardada:false,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
+  save();
+  if(USE_SUPABASE) sbSaveEval(obj);
+}
+function mkR(sel,id){
+  const c=sel?'#4A2A8A':'#ccc';
+  return '<svg id="'+id+'" width="14" height="14" viewBox="0 0 14 14" style="flex-shrink:0;margin-top:2px;" xmlns="http://www.w3.org/2000/svg"><circle cx="7" cy="7" r="6" fill="none" stroke="'+c+'" stroke-width="1.5"/>'+(sel?'<circle cx="7" cy="7" r="3.5" fill="#4A2A8A"/>':'')+'</svg>';
+}
+function sB(ci,ei,bi){
+  ES.b[ci][ei]=bi;
+  DB.criterios[ci].evidencias[ei].banco.forEach((_,idx)=>{
+    const r=document.getElementById('br-'+ci+'-'+ei+'-'+idx);
+    const o=document.getElementById('bo-'+ci+'-'+ei+'-'+idx);
+    if(r)r.outerHTML=mkR(idx===bi,'br-'+ci+'-'+ei+'-'+idx);
+    if(o)o.classList.toggle('sel',idx===bi);
+  });
+}
+function rB(ci,ei){const e=DB.criterios[ci].evidencias[ei];sB(ci,ei,Math.floor(Math.random()*e.banco.length));}
+function uS(){
+  let tot=0;const pts=[];
+  DB.criterios.forEach((c,ci)=>{
+    const tp=c.evidencias.reduce((s,e)=>s+e.pts,0);
+    const mp=ES.c[ci].reduce((s,v,ei)=>s+(v?c.evidencias[ei].pts:0),0);
+    const pct=Math.round((mp/tp)*100);pts.push(pct);tot+=(mp/tp)*c.peso;
+    const cs=document.getElementById('cs-'+ci);const pf=document.getElementById('pf-'+ci);
+    if(cs){cs.textContent=pct+'%';cs.style.color=pct>0?sc(pct):'var(--t3)';}
+    if(pf)pf.style.width=pct+'%';
+  });
+  const s=Math.round(tot);
+  const sn=document.getElementById('esn');if(sn){sn.textContent=s;sn.style.color=s>0?sc(s):'var(--t3)';}
+  const sem=document.getElementById('esem');
+  if(sem){const col=s>=80?'#1A7A52':s>=60?'#8A5C00':s>0?'#A52A2A':'var(--t3)';const lbl=s>=80?'Disciplina solida':s>=60?'En desarrollo':s>0?'Requiere atencion':'Sin evaluar';sem.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:'+col+'"></div><span style="font-size:12px;color:'+col+'">'+lbl+'</span>';}
+  let mb='';DB.criterios.forEach((c,ci)=>{mb+='<div class="mr"><span class="ml">'+c.nombre+'</span><div class="mt"><div class="mf" style="width:'+pts[ci]+'%;background:'+CC[ci]+'"></div></div><span class="mp">'+pts[ci]+'%</span></div>';});
+  document.getElementById('emb').innerHTML=mb;
+}
+function resetE(){ES.c=DB.criterios.map(c=>c.evidencias.map(()=>false));rESc();}
+function guardar(){
+  const ejId=document.getElementById('eej').value;
+  const mes=document.getElementById('emes').value;
+  const notas=document.getElementById('enotas').value;
+  if(!ejId)return alert('Selecciona un ejecutivo');
+  let tot=0;const cS=[];
+  DB.criterios.forEach((c,ci)=>{
+    const tp=c.evidencias.reduce((s,e)=>s+e.pts,0);
+    const mp=ES.c[ci].reduce((s,v,ei)=>s+(v?c.evidencias[ei].pts:0),0);
+    cS.push(Math.round((mp/tp)*100));tot+=(mp/tp)*c.peso;
+  });
+  const score=Math.round(tot);
+  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score,criterios:cS,notas,guardada:true,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
+  save();
+  if(USE_SUPABASE) sbSaveEval(obj);
+  const bajas=DB.criterios.filter((_,ci)=>cS[ci]<50).map(c=>c.nombre);
+  const ej=gEj(ejId);
+  document.getElementById('mss').textContent=ej.nombre+' - '+mL(mes);
+  document.getElementById('msb').innerHTML='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><div style="font-size:36px;font-weight:600;color:'+sc(score)+'">'+score+'</div><div><div style="font-size:13px;font-weight:500;">'+(score>=80?'Disciplina solida':score>=60?'En desarrollo':'Requiere atencion')+'</div><div style="font-size:12px;color:var(--t2);">puntos de 100</div></div></div>'+(bajas.length?'<div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500;">Criterios bajo 50%:</div>'+bajas.map(b=>'<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:13px;"><span style="color:var(--rd);">v</span>'+b+'</div>').join(''):'<div style="font-size:13px;color:var(--gn);">Todos los criterios superan el 50%.</div>');
+  document.getElementById('msaved').classList.add('open');
+}
+
+function rEvo(){
+  const q=(document.getElementById('evq').value||'').toLowerCase();
+  const of=document.getElementById('evof').value;
+  const cur=document.getElementById('evof').value;
+  const s=document.getElementById('evof');
+  s.innerHTML='<option value="">Todas las oficinas</option>';
+  DB.oficinas.forEach(o=>s.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
+  const ms=['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06'];
+  let lista=DB.ejecutivos;
+  if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
+  if(of)lista=lista.filter(e=>e.oficina===of);
+  let h='';
+  lista.forEach(ej=>{
+    const evs=DB.evaluaciones.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
+    if(!evs.length)return;
+    const em={};evs.forEach(e=>em[e.mes]=e);
+    const bars=ms.map(m=>{
+      const ev=em[m];
+      if(!ev)return'<div class="em"><div class="ebw"><div class="eb" style="height:0;background:var(--s2)"></div></div><div class="ev" style="color:var(--t3)">-</div><div class="em2">'+MN[parseInt(m.split('-')[1])-1]+'</div></div>';
+      const hh=Math.round((ev.score/100)*80);
+      return'<div class="em"><div class="ebw"><div class="eb" style="height:'+hh+'px;background:'+sc(ev.score)+'"></div></div><div class="ev" style="color:'+sc(ev.score)+'">'+ev.score+'</div><div class="em2">'+MN[parseInt(m.split('-')[1])-1]+'</div></div>';
+    }).join('');
+    const last=evs[evs.length-1];
+    h+='<div class="ec"><div class="eh"><div class="en">'+ej.nombre+'</div><div class="eof">'+gOf(ej.oficina).nombre+'</div>'+sBd(last.score)+'</div><div class="emo">'+bars+'</div></div>';
+  });
+  document.getElementById('evlist').innerHTML=h||'<div class="empty">Sin evaluaciones registradas</div>';
+}
+
+function rOf(){
+  const mes=document.getElementById('ofm').value;
+  const umb=parseInt(document.getElementById('ofu').value)||50;
+  let h='';
+  DB.oficinas.forEach(of=>{
+    const ejs=DB.ejecutivos.filter(e=>e.oficina===of.id);
+    if(!ejs.length)return;
+    const evs=ejs.map(e=>DB.evaluaciones.find(ev=>ev.ejecutivo===e.id&&ev.mes===mes&&ev.guardada)).filter(Boolean);
+    if(!evs.length){h+='<div class="oc"><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:13px;color:var(--t2);">'+ejs.length+' ejecutivos - ninguno evaluado en '+mL(mes)+'</div></div>';return;}
+    const avg=Math.round(evs.reduce((s,e)=>s+e.score,0)/evs.length);
+    const sol=evs.filter(e=>e.score>=80).length;
+    const at=evs.filter(e=>e.score<60).length;
+    const cob=Math.round(evs.length/ejs.length*100);
+    const al=[];
+    DB.criterios.forEach((c,ci)=>{
+      const scores=evs.map(e=>e.criterios?e.criterios[ci]:null).filter(v=>v!==null);
+      if(!scores.length)return;
+      const bj=scores.filter(s=>s<50).length;
+      const pct=Math.round(bj/scores.length*100);
+      if(pct>=umb)al.push({nombre:c.nombre,pct,n:bj,total:scores.length});
+    });
+    const alH=al.length?'<div class="ab"><div style="font-weight:600;margin-bottom:4px;">Alerta - '+al.length+' criterio'+(al.length>1?'s':'')+' con bajo desempeno colectivo (>= '+umb+'% bajo 50%)</div>'+al.map(a=>'<div style="padding:3px 0;display:flex;gap:8px;"><span>v</span><span>'+a.nombre+' - '+a.n+' de '+a.total+' ejecutivos bajo 50% ('+a.pct+'%)</span></div>').join('')+'</div>':'<div style="font-size:12px;color:var(--gn);margin-bottom:10px;">Sin alertas - ningun criterio supera el umbral colectivo.</div>';
+    const cB=DB.criterios.map((c,ci)=>{const scores=evs.map(e=>e.criterios?e.criterios[ci]:0);const a2=scores.length?Math.round(scores.reduce((s,v)=>s+v,0)/scores.length):0;return'<div class="mr"><span class="ml">'+c.nombre+'</span><div class="mt"><div class="mf" style="width:'+a2+'%;background:'+CC[ci]+'"></div></div><span class="mp">'+a2+'%</span></div>';}).join('');
+    h+='<div class="oc"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap;"><div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:12px;color:var(--t2);">'+ejs.length+' ejecutivos | '+evs.length+' evaluados | '+cob+'% cobertura</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;">'+sBd(avg)+'<span class="badge bg">'+sol+' solidos</span>'+(at?'<span class="badge br">'+at+' atencion</span>':'')+'</div></div>'+alH+'<div style="font-size:12px;color:var(--t2);margin-bottom:6px;font-weight:500;">Promedio por criterio</div>'+cB+'</div>';
+  });
+  document.getElementById('ofv').innerHTML=h||'<div class="empty">Sin datos para este mes</div>';
+}
+
+function rAdmin(){
+  let oh='';DB.oficinas.forEach(o=>{oh+='<div class="ai"><input class="ed" value="'+o.nombre+'" onblur="uOf(\''+o.id+'\',this.value)"><span style="font-size:12px;color:var(--t2);">'+DB.ejecutivos.filter(e=>e.oficina===o.id).length+' ejecutivos</span></div>';});
+  document.getElementById('adof').innerHTML=oh||'<div class="empty">Sin oficinas</div>';
+  let eh='';DB.ejecutivos.forEach(ej=>{eh+='<div class="ai"><input class="ed" value="'+ej.nombre+'" onblur="uEjN(\''+ej.id+'\',this.value)"><select class="sel" onchange="uEjO(\''+ej.id+'\',this.value)">'+DB.oficinas.map(o=>'<option value="'+o.id+'"'+(o.id===ej.oficina?' selected':'')+'>'+o.nombre+'</option>').join('')+'</select><button class="btn btn-sm" onclick="dEj(\''+ej.id+'\')" style="color:var(--rd);border-color:var(--rd);">Eliminar</button></div>';});
+  document.getElementById('adej').innerHTML=eh;
+  let ch='';
+  DB.criterios.forEach((c,ci)=>{
+    let evh='';
+    c.evidencias.forEach((e,ei)=>{
+      const bh=e.tipo==='rotativa'?'<div style="margin:6px 0 2px 20px;"><div style="font-size:11px;color:var(--t3);margin-bottom:4px;display:flex;align-items:center;justify-content:space-between;"><span>Banco rotativo</span><button class="btn btn-sm" onclick="addBI('+ci+','+ei+')">+ Agregar</button></div>'+e.banco.map((b,bi)=>'<div style="display:flex;align-items:center;gap:8px;padding:4px 0;border-bottom:1px solid var(--bd);"><input class="ed" value="'+b+'" onblur="uBI('+ci+','+ei+','+bi+',this.value)" style="flex:1;font-size:12px;"><button class="btn btn-sm" onclick="dBI('+ci+','+ei+','+bi+')" style="color:var(--rd);">x</button></div>').join('')+'</div>':'';
+      evh+='<div style="padding:8px 0 4px;border-bottom:1px solid var(--bd);"><div style="display:flex;align-items:center;gap:8px;"><input class="ed" value="'+e.texto+'" onblur="uEvT('+ci+','+ei+',this.value)" style="flex:1;font-size:13px;"><span class="etag '+e.tipo+'">'+e.tipo+'</span><input type="number" value="'+e.pts+'" min="1" max="20" onblur="uEvP('+ci+','+ei+',this.value)" style="width:44px;text-align:center;border:1px solid var(--bd2);border-radius:4px;padding:3px;font-family:inherit;font-size:12px;background:var(--bg);"><button class="btn btn-sm" onclick="dEv('+ci+','+ei+')" style="color:var(--rd);">x</button></div>'+bh+'</div>';
+    });
+    ch+='<div style="border-bottom:1px solid var(--bd);padding:14px 18px;"><div style="display:flex;align-items:center;gap:10px;margin-bottom:10px;"><input class="ed" value="'+c.nombre+'" onblur="uCN('+ci+',this.value)" style="font-size:14px;font-weight:600;flex:1;"><span style="font-size:12px;color:var(--t2);">Peso:</span><input type="number" value="'+c.peso+'" min="1" max="50" onblur="uCP('+ci+',this.value)" style="width:50px;text-align:center;border:1px solid var(--bd2);border-radius:4px;padding:4px;font-family:inherit;background:var(--bg);"><span style="font-size:12px;color:var(--t2);">pts</span></div>'+evh+'<button class="btn btn-sm" style="margin-top:8px;" onclick="addEv('+ci+')">+ Agregar evidencia</button></div>';
+  });
+  document.getElementById('adcr').innerHTML=ch;
+}
+
+function uOf(id,v){const o=DB.oficinas.find(o=>o.id===id);if(o){o.nombre=v;save();if(USE_SUPABASE)sbSaveOficina(id,v);}}
+function uEjN(id,v){const e=DB.ejecutivos.find(e=>e.id===id);if(e){e.nombre=v;save();if(USE_SUPABASE)sbSaveEjecutivo(id,v,e.oficina);}}
+function uEjO(id,v){const e=DB.ejecutivos.find(e=>e.id===id);if(e){e.oficina=v;save();if(USE_SUPABASE)sbSaveEjecutivo(id,e.nombre,v);}}
+function uCN(ci,v){DB.criterios[ci].nombre=v;save();}
+function uCP(ci,v){DB.criterios[ci].peso=parseInt(v)||0;save();}
+function uEvT(ci,ei,v){DB.criterios[ci].evidencias[ei].texto=v;save();}
+function uEvP(ci,ei,v){DB.criterios[ci].evidencias[ei].pts=parseInt(v)||0;save();}
+function uBI(ci,ei,bi,v){DB.criterios[ci].evidencias[ei].banco[bi]=v;save();}
+function dBI(ci,ei,bi){DB.criterios[ci].evidencias[ei].banco.splice(bi,1);save();rAdmin();}
+function addBI(ci,ei){DB.criterios[ci].evidencias[ei].banco.push('Nueva pregunta');save();rAdmin();}
+function addEv(ci){DB.criterios[ci].evidencias.push({texto:'Nueva evidencia',tipo:'fija',pts:5,banco:[]});save();rAdmin();}
+function dEv(ci,ei){DB.criterios[ci].evidencias.splice(ei,1);save();rAdmin();}
+function addOf(){
+  if(USE_SUPABASE){
+    sbAddOficina('Nueva oficina').then(id=>{
+      if(id){DB.oficinas.push({id,nombre:'Nueva oficina'});save();rAdmin();}
+    });
+  } else {
+    DB.oficinas.push({id:'o'+Date.now(),nombre:'Nueva oficina'});save();rAdmin();
+  }
+}
+function dEj(id){if(!confirm('Eliminar este ejecutivo?'))return;DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);save();rAdmin();}
+function openAE(){
+  const s=document.getElementById('nejof');
+  s.innerHTML=DB.oficinas.map(o=>'<option value="'+o.id+'">'+o.nombre+'</option>').join('');
+  document.getElementById('nejn').value='';
+  document.getElementById('maej').classList.add('open');
+}
+function sNE(){
+  const n=document.getElementById('nejn').value.trim();
+  const of=document.getElementById('nejof').value;
+  if(!n)return alert('Ingresa el nombre');
+  if(USE_SUPABASE){
+    sbAddEjecutivo(n,of).then(id=>{
+      if(id){DB.ejecutivos.push({id,nombre:n,oficina:of});save();rAdmin();lES();cM('maej');}
+    });
+  } else {
+    DB.ejecutivos.push({id:'e'+Date.now(),nombre:n,oficina:of});save();rAdmin();lES();cM('maej');
+  }
+}
+function cM(id){document.getElementById(id).classList.remove('open');}
+
+// Set all month selectors to current month BEFORE rendering
+const _hoy = new Date();
+const _mesActual = _hoy.getFullYear()+'-'+String(_hoy.getMonth()+1).padStart(2,'0');
+['dm','emes','ofm'].forEach(function(id){
+  const el=document.getElementById(id);
+  if(el){
+    // Set value directly
+    el.value = _mesActual;
+    // If browser didn't accept it (option not found), add it
+    if(el.value !== _mesActual){
+      const opt = document.createElement('option');
+      opt.value = _mesActual;
+      opt.textContent = _mesActual;
+      el.appendChild(opt);
+      el.value = _mesActual;
+    }
+  }
+});
+lES();rD();
+document.getElementById('eempty').style.display='block';
+if(USE_SUPABASE) sbInit();
+</script>
+</body>
+</html>
