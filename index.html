@@ -118,9 +118,9 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
   <div class="nt">
     <button class="ntb active" onclick="sv('dashboard')">Dashboard</button>
     <button class="ntb" onclick="sv('evaluar')">Evaluar</button>
-    <button class="ntb" onclick="sv('evolucion')">Evolucion</button>
+    <button class="ntb" onclick="sv('evolución')">Evolución</button>
     <button class="ntb" onclick="sv('oficinas')">Por oficina</button>
-    <button class="ntb" onclick="sv('admin')">Administracion</button>
+    <button class="ntb" onclick="sv('admin')">Administración</button>
   </div>
   <div style="font-size:13px;color:var(--t2)">Cuarto de Control</div>
 </nav>
@@ -141,13 +141,13 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
   </div>
   <div class="sr" id="sr"></div>
   <div class="tw"><div class="th2"><span class="tt" id="tl">Ejecutivos</span></div>
-    <table><thead><tr><th>Ejecutivo</th><th>Oficina</th><th>Score anterior</th><th>Este mes</th><th>Accion</th></tr></thead><tbody id="etb"></tbody></table>
+    <table><thead><tr><th>Ejecutivo</th><th>Oficina</th><th>Score anterior</th><th>Este mes</th><th>Acción</th></tr></thead><tbody id="etb"></tbody></table>
   </div>
 </div>
 
 <div class="vw" id="vw-evaluar">
   <div class="pt">Evaluar ejecutivo</div>
-  <div class="ps">Si ya existe evaluacion del mes seleccionado, se carga automaticamente con sus checks</div>
+  <div class="ps">Si ya existe evaluación del mes seleccionado, se carga automaticamente con sus checks</div>
   <div style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
     <div style="flex:1;min-width:180px;"><label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Ejecutivo</label>
       <select class="sel" style="width:100%;" id="eej" onchange="lE()"><option value="">Selecciona</option></select></div>
@@ -170,14 +170,14 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
     <div id="ecrits"></div>
     <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:16px;">
       <button class="btn" onclick="resetE()">Reiniciar</button>
-      <button class="btn btn-p" onclick="guardar()">Guardar evaluacion</button>
+      <button class="btn btn-p" onclick="guardar()">Guardar evaluación</button>
     </div>
   </div>
   <div id="eempty" class="empty">Selecciona un ejecutivo para cargar el scorecard</div>
 </div>
 
-<div class="vw" id="vw-evolucion">
-  <div class="pt">Evolucion por ejecutivo</div><div class="ps">Historial de scores mes a mes</div>
+<div class="vw" id="vw-evolución">
+  <div class="pt">Evolución por ejecutivo</div><div class="ps">Historial de scores mes a mes</div>
   <div class="fr">
     <input class="inp" placeholder="Buscar ejecutivo..." oninput="rEvo()" id="evq" style="width:220px;">
     <select class="sel" onchange="rEvo()" id="evof"><option value="">Todas las oficinas</option></select>
@@ -187,7 +187,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
 
 <div class="vw" id="vw-oficinas">
   <div class="pt">Disciplina por oficina</div>
-  <div class="ps">Score promedio del equipo y alertas cuando la mayoria tiene bajo desempeno en un criterio</div>
+  <div class="ps">Score promedio del equipo y alertas cuando la mayoria tiene bajo desempeño en un criterio</div>
   <div class="fr">
     <select class="sel" id="ofm" onchange="rOf()">
       <option value="2025-01">Ene 2025</option><option value="2025-02">Feb 2025</option><option value="2025-03">Mar 2025</option><option value="2025-04">Abr 2025</option><option value="2025-05">May 2025</option><option value="2025-06">Jun 2025</option><option value="2025-07">Jul 2025</option><option value="2025-08">Ago 2025</option><option value="2025-09">Sep 2025</option><option value="2025-10">Oct 2025</option><option value="2025-11">Nov 2025</option><option value="2025-12">Dic 2025</option>
@@ -201,14 +201,14 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
 </div>
 
 <div class="vw" id="vw-admin">
-  <div class="pt">Administracion</div><div class="ps">Haz clic en cualquier texto para editarlo directamente</div>
+  <div class="pt">Administración</div><div class="ps">Haz clic en cualquier texto para editarlo directamente</div>
   <div class="as"><div class="ash"><span class="ast">Oficinas</span><div style="display:flex;gap:8px;align-items:center;"><input class="inp" id="nueva-of" placeholder="Nombre de la oficina..." style="width:220px;" onkeydown="if(event.key==='Enter')addOf()"><button class="btn btn-sm btn-p" onclick="addOf()">+ Agregar</button></div></div><div id="adof"></div></div>
   <div class="as"><div class="ash"><span class="ast">Ejecutivos</span><button class="btn btn-sm" onclick="openAE()">+ Agregar</button></div><div id="adej"></div></div>
   <div class="as"><div class="ash"><span class="ast">Criterios y banco de preguntas</span></div><div id="adcr"></div></div>
 </div>
 
 <div class="mov" id="msaved">
-  <div class="mo"><div class="moh"><div><div class="mot">Evaluacion guardada</div><div class="mos" id="mss"></div></div><button class="mox" onclick="cM('msaved')">x</button></div>
+  <div class="mo"><div class="moh"><div><div class="mot">Evaluación guardada</div><div class="mos" id="mss"></div></div><button class="mox" onclick="cM('msaved')">x</button></div>
     <div class="mob" id="msb"></div>
     <div class="mof"><button class="btn btn-p" onclick="cM('msaved');sv('dashboard')">Ir al dashboard</button></div>
   </div>
@@ -233,7 +233,7 @@ let chip='todos';
 let DB=JSON.parse(localStorage.getItem('dc_db')||'null')||{
   oficinas:[{id:'o1',nombre:'Monterrey Norte'},{id:'o2',nombre:'Monterrey Sur'},{id:'o3',nombre:'Guadalajara Centro'},{id:'o4',nombre:'CDMX Insurgentes'},{id:'o5',nombre:'CDMX Santa Fe'},{id:'o6',nombre:'Puebla'},{id:'o7',nombre:'Leon'},{id:'o8',nombre:'Queretaro'},{id:'o9',nombre:'Tijuana'},{id:'o10',nombre:'Hermosillo'}],
   ejecutivos:[{id:'e1',nombre:'Ana Martinez',oficina:'o1'},{id:'e2',nombre:'Carlos Reyes',oficina:'o1'},{id:'e3',nombre:'Sofia Torres',oficina:'o2'},{id:'e4',nombre:'Javier Medina',oficina:'o2'},{id:'e5',nombre:'Laura Sanchez',oficina:'o3'},{id:'e6',nombre:'Roberto Cruz',oficina:'o3'},{id:'e7',nombre:'Patricia Vargas',oficina:'o4'},{id:'e8',nombre:'Miguel Angel Flores',oficina:'o4'},{id:'e9',nombre:'Daniela Lopez',oficina:'o5'},{id:'e10',nombre:'Fernando Gomez',oficina:'o5'},{id:'e11',nombre:'Valeria Hernandez',oficina:'o6'},{id:'e12',nombre:'Andres Castillo',oficina:'o7'}],
-  evaluaciones:[
+  evaluaciónes:[
     {id:'ev1',ejecutivo:'e1',mes:'2025-03',score:72,criterios:[80,60,70,100,80,50],notas:'',guardada:true,detalle:[[true,false,true,true],[true,false,true,false],[true,true,false],[true,true,false,false],[true,true,false,true],[false,true,false,true]]},
     {id:'ev2',ejecutivo:'e1',mes:'2025-04',score:81,criterios:[90,80,70,100,80,65],notas:'',guardada:true,detalle:[[true,true,true,true],[true,true,true,false],[true,true,false],[true,true,true,false],[true,true,true,false],[false,true,true,true]]},
     {id:'ev3',ejecutivo:'e2',mes:'2025-04',score:68,criterios:[70,70,50,80,70,70],notas:'',guardada:true,detalle:[[true,false,true,true],[true,true,true,false],[true,false,false],[true,true,true,false],[true,false,true,true],[true,true,false,true]]},
@@ -244,39 +244,39 @@ let DB=JSON.parse(localStorage.getItem('dc_db')||'null')||{
   ],
   criterios:[
     {id:'c1',nombre:'Uso de data para decisiones',peso:20,evidencias:[
-      {texto:'Puede mostrar un dashboard que consulto esta semana',tipo:'rotativa',pts:5,banco:['Cuanto lleva de cumplimiento al presupuesto en el mes en % y en $?','Que agentes no estan emitiendo en el mes?','Cual es el presupuesto de X agente en el mes?','Cual es el presupuesto de X agente acumulado?','Cuanto ha crecido o decrecido X agente a mes vencido?','Del cumplimiento al presupuesto de X agente cuanto lleva por ramo?','Que agentes tienen prima negativa en el mes?']},
-      {texto:'Identifica los agentes con decremento vs año anterior y sabe cuantos son',tipo:'fija',pts:5,banco:[]},
-      {texto:'Tomo una accion concreta basada en un dato esta semana (puede describir cual y que hizo)',tipo:'fija',pts:5,banco:[]},
-      {texto:'No necesita que alguien mas le interprete los datos; lo hace solo',tipo:'rotativa',pts:5,banco:['Sabe que puede ver en cada seccion del cuadro de mando?','Como se lee el primer grafico de la segunda fila?','Como puedo saber que agentes ya son productivos?','Cuantos agentes ya te emitieron mas de $450,000?','Cuantos agentes te han emitido en lo que va del año?','Cuantos agentes te han vendido GMM en el mes?']}
+      {texto:'Puede mostrar un dashboard que consulto esta semana',tipo:'rotativa',pts:5,banco:['Cuánto lleva de cumplimiento al presupuesto en el mes en % y en $?','Qué agentes no están emitiendo en el mes?','Cuál es el presupuesto de X agente en el mes?','Cuál es el presupuesto de X agente acumulado?','Cuánto ha crecido o decrecido X agente a mes vencido?','Del cumplimiento al presupuesto de X agente cuánto lleva por ramo?','Qué agentes tienen prima negativa en el mes?']},
+      {texto:'Identifica los agentes con decremento vs año anterior y sabe cuántos son',tipo:'fija',pts:5,banco:[]},
+      {texto:'Tomo una acción concreta basada en un dato esta semana (puede describir cual y que hizo)',tipo:'fija',pts:5,banco:[]},
+      {texto:'No necesita que alguien mas le interprete los datos; lo hace solo',tipo:'rotativa',pts:5,banco:['Sabe qué puede ver en cada seccion del cuadro de mando?','Cómo se lee el primer grafico de la segunda fila?','Cómo puedo saber que agentes ya son productivos?','Cuántos agentes ya te emitieron mas de $450,000?','Cuántos agentes te han emitido en lo que va del año?','Cuántos agentes te han vendido GMM en el mes?']}
     ]},
     {id:'c2',nombre:'Seguimiento de agentes activos',peso:20,evidencias:[
-      {texto:'Sabe el numero exacto de agentes activos de su cartera hoy en el mes',tipo:'fija',pts:5,banco:[]},
-      {texto:'Sabe que agentes no le han emitido en el mes',tipo:'fija',pts:5,banco:[]},
-      {texto:'Sabe que agentes no le han emitido en el año',tipo:'fija',pts:5,banco:[]},
-      {texto:'Ejecuto al menos una accion de reactivacion en los ultimos 15 dias (puede evidenciarlo)',tipo:'fija',pts:5,banco:[]}
+      {texto:'Sabe el número exacto de agentes activos de su cartera hoy en el mes',tipo:'fija',pts:5,banco:[]},
+      {texto:'Sabe qué agentes no le han emitido en el mes',tipo:'fija',pts:5,banco:[]},
+      {texto:'Sabe qué agentes no le han emitido en el año',tipo:'fija',pts:5,banco:[]},
+      {texto:'Ejecuto al menos una acción de reactivacion en los últimos 15 dias (puede evidenciarlo)',tipo:'fija',pts:5,banco:[]}
     ]},
-    {id:'c3',nombre:'Tuberias',peso:9,evidencias:[
-      {texto:'Sabe ingresar a las tuberias de flotillas y danos desde cuadro de mando',tipo:'rotativa',pts:3,banco:['Sabe poner los filtros en las tuberias?','Cuantos negocios y que valor tienen los liberados en los ultimos 15 dias?','Cuantos negocios liberados tiene por producto?','Que negocios tiene de mas de $100,000?']},
-      {texto:'Tiene negocios solo vigentes en las tuberias (cuestionar 4 y todos deben seguir vivos)',tipo:'fija',pts:3,banco:[]},
-      {texto:'Ha enviado al BOT folios para cerrar, mostrar evidencia del correo',tipo:'fija',pts:3,banco:[]}
+    {id:'c3',nombre:'Tuberías',peso:9,evidencias:[
+      {texto:'Sabe ingresar a las tuberías de flotillas y daños desde cuadro de mando',tipo:'rotativa',pts:3,banco:['Sabe poner los filtros en las tuberias?','Cuántos negocios y qué valor tienen los liberados en los últimos 15 dias?','Cuántos negocios liberados tiene por producto?','Qué negocios tiene de mas de $100,000?']},
+      {texto:'Tiene negocios solo vigentes en las tuberías (cuestionar 4 y todos deben seguir vivos)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Ha enviado al BOT folios para cerrar (mostrar evidencia del correo)',tipo:'fija',pts:3,banco:[]}
     ]},
     {id:'c4',nombre:'Reuniones con gerente',peso:11,evidencias:[
-      {texto:'Las reuniones estan agendadas recurrentemente (puede mostrar el calendario)',tipo:'fija',pts:3,banco:[]},
-      {texto:'Que planes de accion se definieron (puede mostrar evidencia)',tipo:'fija',pts:3,banco:[]},
-      {texto:'La reunion de esta semana ya ocurrio (o tiene fecha confirmada)',tipo:'fija',pts:3,banco:[]},
-      {texto:'Los planes de accion ya fueron actualizados con su estatus',tipo:'fija',pts:2,banco:[]}
+      {texto:'Las reuniones están agendadas recurrentemente (puede mostrar el calendario)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Que planes de acción se definieron (puede mostrar evidencia)',tipo:'fija',pts:3,banco:[]},
+      {texto:'La reunión de esta semana ya ocurrió (o tiene fecha confirmada)',tipo:'fija',pts:3,banco:[]},
+      {texto:'Los planes de acción ya fueron actualizados con su estatus',tipo:'fija',pts:2,banco:[]}
     ]},
-    {id:'c5',nombre:'Proyeccion de cierre',peso:20,evidencias:[
-      {texto:'Conoce y sabe leer el archivo de proyeccion',tipo:'fija',pts:5,banco:[]},
-      {texto:'Tiene una proyeccion documentada para el mes (no de memoria)',tipo:'fija',pts:5,banco:[]},
-      {texto:'La proyeccion especifica los negocios a cerrar',tipo:'fija',pts:5,banco:[]},
-      {texto:'Se tienen planes de accion especificos si la proyeccion es menos del 100%',tipo:'fija',pts:5,banco:[]}
+    {id:'c5',nombre:'Proyección de cierre',peso:20,evidencias:[
+      {texto:'Conoce y sabe leer el archivo de proyección',tipo:'fija',pts:5,banco:[]},
+      {texto:'Tiene una proyección documentada para el mes (no de memoria)',tipo:'fija',pts:5,banco:[]},
+      {texto:'La proyección especifica los negocios a cerrar',tipo:'fija',pts:5,banco:[]},
+      {texto:'Se tienen planes de acción especificos si la proyección es menos del 100%',tipo:'fija',pts:5,banco:[]}
     ]},
     {id:'c6',nombre:'Plan de visitas',peso:20,evidencias:[
       {texto:'Tiene un plan de visitas documentado para la semana actual (antes de que empiece)',tipo:'fija',pts:5,banco:[]},
-      {texto:'Uso de dashboards en visitas',tipo:'rotativa',pts:5,banco:['Puede mostrar como usaria el cuadro de mando en una visita con un agente filtrandolo','Puede mostrar como usaria la tuberia de flotillas en una visita con un agente filtrandolo','Puede mostrar como usaria la tuberia de danos en una visita con un agente filtrandolo']},
+      {texto:'Uso de dashboards en visitas',tipo:'rotativa',pts:5,banco:['Puede mostrar cómo usaría el cuadro de mando en una visita con un agente filtrándolo','Puede mostrar cómo usaría la tubería de flotillas en una visita con un agente filtrándolo','Puede mostrar cómo usaría la tubería de daños en una visita con un agente filtrándolo']},
       {texto:'Cada visita planeada tiene objetivo definido (no solo nombre del cliente)',tipo:'fija',pts:5,banco:[]},
-      {texto:'Puede ligar como una visita esta ligada a data de algun dashboard',tipo:'fija',pts:5,banco:[]}
+      {texto:'Puede ligar cómo una visita está ligada a data de algun dashboard',tipo:'fija',pts:5,banco:[]}
     ]}
   ]
 };
@@ -313,11 +313,11 @@ async function sbInit(){
       console.log('Ejecutivos cargados:', DB.ejecutivos.length);
     }
 
-    // 3. Evaluaciones
-    const {data:evs, error:eEv} = await SB.from('evaluaciones').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
+    // 3. Evaluaciónes
+    const {data:evs, error:eEv} = await SB.from('evaluaciónes').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
     if(eEv) throw eEv;
     if(evs && evs.length){
-      DB.evaluaciones = evs.map(ev=>({
+      DB.evaluaciónes = evs.map(ev=>({
         id: ev.id,
         ejecutivo: ev.ejecutivo_id,
         mes: ev.mes,
@@ -328,9 +328,9 @@ async function sbInit(){
         detalle: ev.detalle_checks||null,
         bancos: ev.bancos_sel||null
       }));
-      console.log('Evaluaciones cargadas:', DB.evaluaciones.length);
+      console.log('Evaluaciónes cargadas:', DB.evaluaciónes.length);
     } else {
-      DB.evaluaciones = [];
+      DB.evaluaciónes = [];
     }
 
     save();
@@ -346,7 +346,7 @@ async function sbInit(){
 async function sbSaveEval(obj){
   if(!SB) return;
   try {
-    const {data, error} = await SB.from('evaluaciones').upsert({
+    const {data, error} = await SB.from('evaluaciónes').upsert({
       ejecutivo_id: obj.ejecutivo,
       mes: obj.mes,
       score: obj.score,
@@ -358,12 +358,12 @@ async function sbSaveEval(obj){
       bancos_sel: obj.bancos
     }, {onConflict:'ejecutivo_id,mes'}).select('id').single();
     if(error) throw error;
-    const idx = DB.evaluaciones.findIndex(e=>e.ejecutivo===obj.ejecutivo&&e.mes===obj.mes);
-    if(idx>=0) DB.evaluaciones[idx].id = data.id;
+    const idx = DB.evaluaciónes.findIndex(e=>e.ejecutivo===obj.ejecutivo&&e.mes===obj.mes);
+    if(idx>=0) DB.evaluaciónes[idx].id = data.id;
     save();
-    console.log('Evaluacion guardada en Supabase:', data.id);
+    console.log('Evaluación guardada en Supabase:', data.id);
   } catch(e){
-    console.error('Error guardando evaluacion:', e);
+    console.error('Error guardando evaluación:', e);
     alert('Error al guardar en Supabase: '+(e.message||JSON.stringify(e)));
   }
 }
@@ -395,15 +395,15 @@ async function sbAddEjecutivo(nombre, oficina_id){
 }
 function gOf(id){return DB.oficinas.find(o=>o.id===id)||{nombre:'?'};}
 function gEj(id){return DB.ejecutivos.find(e=>e.id===id)||{nombre:'?'};}
-function gEv(ejId,mes){return DB.evaluaciones.find(e=>e.ejecutivo===ejId&&e.mes===mes);}
-function gPrev(ejId,mes){return DB.evaluaciones.filter(e=>e.ejecutivo===ejId&&e.mes<mes&&e.guardada).sort((a,b)=>b.mes.localeCompare(a.mes))[0];}
+function gEv(ejId,mes){return DB.evaluaciónes.find(e=>e.ejecutivo===ejId&&e.mes===mes);}
+function gPrev(ejId,mes){return DB.evaluaciónes.filter(e=>e.ejecutivo===ejId&&e.mes<mes&&e.guardada).sort((a,b)=>b.mes.localeCompare(a.mes))[0];}
 function mL(m){const[y,mo]=m.split('-');return MN[parseInt(mo)-1]+' '+y;}
 function sc(s){return s>=80?'#1A7A52':s>=60?'#8A5C00':'#A52A2A';}
 function sBd(s){
   if(s===undefined||s===null)return'<span class="badge bgr">Sin evaluar</span>';
-  if(s>=80)return'<span class="badge bg">'+s+' - Solida</span>';
-  if(s>=60)return'<span class="badge ba">'+s+' - En desarrollo</span>';
-  return'<span class="badge br">'+s+' - Atencion</span>';
+  if(s>=80)return'<span class="badge bg">'+s+' - Sólida</span>';
+  if(s>=60)return'<span class="badge ba">'+s+' — En desarrollo</span>';
+  return'<span class="badge br">'+s+' - Atención</span>';
 }
 
 function sv(id){
@@ -412,7 +412,7 @@ function sv(id){
   document.getElementById('vw-'+id).classList.add('active');
   document.querySelectorAll('.ntb').forEach(t=>{if(t.getAttribute('onclick').includes("'"+id+"'"))t.classList.add('active');});
   if(id==='dashboard')rD();
-  if(id==='evolucion')rEvo();
+  if(id==='evolución')rEvo();
   if(id==='oficinas')rOf();
   if(id==='admin')rAdmin();
 }
@@ -431,7 +431,7 @@ function rD(){
   const ofS=document.getElementById('dof');
   ofS.innerHTML='<option value="">Todas las oficinas</option>';
   DB.oficinas.forEach(o=>ofS.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
-  const evs=DB.evaluaciones.filter(e=>e.mes===mes);
+  const evs=DB.evaluaciónes.filter(e=>e.mes===mes);
   const em={};evs.forEach(e=>{em[e.ejecutivo]=e;});
   const tot=DB.ejecutivos.length;
   const evd=evs.filter(e=>e.guardada).length;
@@ -448,7 +448,7 @@ function rD(){
     '<div class="sc a"><div class="sv">'+pend+'</div><div class="sl">Pendientes</div><div class="rb"><div class="rbt"><div class="rbf" style="width:'+Math.round(pend/tot*100)+'%;background:var(--am)"></div></div><div class="rp">'+Math.round(pend/tot*100)+'%</div></div></div>'+
     '<div class="sc'+(tr>0?' a':'')+'"><div class="sv">'+tr+'</div><div class="sl">Sin cerrar</div></div>'+
     '<div class="sc'+(avg>=80?' g':avg>=60?' a':avg>0?' r':'')+'"><div class="sv">'+(avg||'?')+'</div><div class="sl">Score promedio</div></div>'+
-    '<div class="sc g"><div class="sv">'+sol+'</div><div class="sl">Disciplina solida</div></div>';
+    '<div class="sc g"><div class="sv">'+sol+'</div><div class="sl">Disciplina sólida</div></div>';
   let lista=DB.ejecutivos;
   if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
   if(of)lista=lista.filter(e=>e.oficina===of);
@@ -489,7 +489,7 @@ function lE(){
     document.getElementById('enotas').value=ex.notas||'';
   }else{document.getElementById('enotas').value='';}
   const prev=gPrev(ejId,mes);
-  document.getElementById('eprev').innerHTML=prev?'Previo: <b>'+mL(prev.mes)+'</b> '+sBd(prev.score):'Sin evaluaciones previas';
+  document.getElementById('eprev').innerHTML=prev?'Previo: <b>'+mL(prev.mes)+'</b> '+sBd(prev.score):'Sin evaluaciónes previas';
   rESc();
 }
 function rESc(){
@@ -517,9 +517,9 @@ function autoSave(){
   const ejId=document.getElementById('eej').value;
   const mes=document.getElementById('emes').value;
   if(!ejId)return;
-  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
-  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score:null,criterios:null,notas:document.getElementById('enotas').value,guardada:false,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
-  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
+  const idx=DB.evaluaciónes.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciónes[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score:null,criterios:null,notas:document.getElementById('enotas').value,guardada:false,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciónes[idx]=obj;else DB.evaluaciónes.push(obj);
   save();
   if(USE_SUPABASE) sbSaveEval(obj);
 }
@@ -550,7 +550,7 @@ function uS(){
   const s=Math.round(tot);
   const sn=document.getElementById('esn');if(sn){sn.textContent=s;sn.style.color=s>0?sc(s):'var(--t3)';}
   const sem=document.getElementById('esem');
-  if(sem){const col=s>=80?'#1A7A52':s>=60?'#8A5C00':s>0?'#A52A2A':'var(--t3)';const lbl=s>=80?'Disciplina solida':s>=60?'En desarrollo':s>0?'Requiere atencion':'Sin evaluar';sem.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:'+col+'"></div><span style="font-size:12px;color:'+col+'">'+lbl+'</span>';}
+  if(sem){const col=s>=80?'#1A7A52':s>=60?'#8A5C00':s>0?'#A52A2A':'var(--t3)';const lbl=s>=80?'Disciplina sólida':s>=60?'En desarrollo':s>0?'Requiere atención':'Sin evaluar';sem.innerHTML='<div style="width:8px;height:8px;border-radius:50%;background:'+col+'"></div><span style="font-size:12px;color:'+col+'">'+lbl+'</span>';}
   let mb='';DB.criterios.forEach((c,ci)=>{mb+='<div class="mr"><span class="ml">'+c.nombre+'</span><div class="mt"><div class="mf" style="width:'+pts[ci]+'%;background:'+CC[ci]+'"></div></div><span class="mp">'+pts[ci]+'%</span></div>';});
   document.getElementById('emb').innerHTML=mb;
 }
@@ -567,15 +567,15 @@ function guardar(){
     cS.push(Math.round((mp/tp)*100));tot+=(mp/tp)*c.peso;
   });
   const score=Math.round(tot);
-  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
-  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score,criterios:cS,notas,guardada:true,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
-  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
+  const idx=DB.evaluaciónes.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciónes[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score,criterios:cS,notas,guardada:true,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciónes[idx]=obj;else DB.evaluaciónes.push(obj);
   save();
   if(USE_SUPABASE) sbSaveEval(obj);
   const bajas=DB.criterios.filter((_,ci)=>cS[ci]<50).map(c=>c.nombre);
   const ej=gEj(ejId);
   document.getElementById('mss').textContent=ej.nombre+' - '+mL(mes);
-  document.getElementById('msb').innerHTML='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><div style="font-size:36px;font-weight:600;color:'+sc(score)+'">'+score+'</div><div><div style="font-size:13px;font-weight:500;">'+(score>=80?'Disciplina solida':score>=60?'En desarrollo':'Requiere atencion')+'</div><div style="font-size:12px;color:var(--t2);">puntos de 100</div></div></div>'+(bajas.length?'<div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500;">Criterios bajo 50%:</div>'+bajas.map(b=>'<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:13px;"><span style="color:var(--rd);">v</span>'+b+'</div>').join(''):'<div style="font-size:13px;color:var(--gn);">Todos los criterios superan el 50%.</div>');
+  document.getElementById('msb').innerHTML='<div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;"><div style="font-size:36px;font-weight:600;color:'+sc(score)+'">'+score+'</div><div><div style="font-size:13px;font-weight:500;">'+(score>=80?'Disciplina sólida':score>=60?'En desarrollo':'Requiere atención')+'</div><div style="font-size:12px;color:var(--t2);">puntos de 100</div></div></div>'+(bajas.length?'<div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500;">Criterios bajo 50%:</div>'+bajas.map(b=>'<div style="display:flex;gap:8px;padding:5px 0;border-bottom:1px solid var(--bd);font-size:13px;"><span style="color:var(--rd);">v</span>'+b+'</div>').join(''):'<div style="font-size:13px;color:var(--gn);">Todos los criterios superan el 50%.</div>');
   document.getElementById('msaved').classList.add('open');
 }
 
@@ -598,7 +598,7 @@ function rEvo(){
   if(of)lista=lista.filter(e=>e.oficina===of);
   let h='';
   lista.forEach(ej=>{
-    const evs=DB.evaluaciones.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
+    const evs=DB.evaluaciónes.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
     if(!evs.length)return;
     const em={};evs.forEach(e=>em[e.mes]=e);
     console.log('Ejecutivo:', ej.nombre, '| Meses en DB:', evs.map(e=>e.mes), '| Meses buscados:', ms);
@@ -611,7 +611,7 @@ function rEvo(){
     const last=evs[evs.length-1];
     h+='<div class="ec"><div class="eh"><div class="en">'+ej.nombre+'</div><div class="eof">'+gOf(ej.oficina).nombre+'</div>'+sBd(last.score)+'</div><div class="emo">'+bars+'</div></div>';
   });
-  document.getElementById('evlist').innerHTML=h||'<div class="empty">Sin evaluaciones registradas</div>';
+  document.getElementById('evlist').innerHTML=h||'<div class="empty">Sin evaluaciónes registradas</div>';
 }
 
 function rOf(){
@@ -621,7 +621,7 @@ function rOf(){
   DB.oficinas.forEach(of=>{
     const ejs=DB.ejecutivos.filter(e=>e.oficina===of.id);
     if(!ejs.length)return;
-    const evs=ejs.map(e=>DB.evaluaciones.find(ev=>ev.ejecutivo===e.id&&ev.mes===mes&&ev.guardada)).filter(Boolean);
+    const evs=ejs.map(e=>DB.evaluaciónes.find(ev=>ev.ejecutivo===e.id&&ev.mes===mes&&ev.guardada)).filter(Boolean);
     if(!evs.length){h+='<div class="oc"><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:13px;color:var(--t2);">'+ejs.length+' ejecutivos - ninguno evaluado en '+mL(mes)+'</div></div>';return;}
     const avg=Math.round(evs.reduce((s,e)=>s+e.score,0)/evs.length);
     const sol=evs.filter(e=>e.score>=80).length;
@@ -635,9 +635,9 @@ function rOf(){
       const pct=Math.round(bj/scores.length*100);
       if(pct>=umb)al.push({nombre:c.nombre,pct,n:bj,total:scores.length});
     });
-    const alH=al.length?'<div class="ab"><div style="font-weight:600;margin-bottom:4px;">Alerta - '+al.length+' criterio'+(al.length>1?'s':'')+' con bajo desempeno colectivo (>= '+umb+'% bajo 50%)</div>'+al.map(a=>'<div style="padding:3px 0;display:flex;gap:8px;"><span>v</span><span>'+a.nombre+' - '+a.n+' de '+a.total+' ejecutivos bajo 50% ('+a.pct+'%)</span></div>').join('')+'</div>':'<div style="font-size:12px;color:var(--gn);margin-bottom:10px;">Sin alertas - ningun criterio supera el umbral colectivo.</div>';
+    const alH=al.length?'<div class="ab"><div style="font-weight:600;margin-bottom:4px;">Alerta — '+al.length+' criterio'+(al.length>1?'s':'')+' con bajo desempeño colectivo (>= '+umb+'% bajo 50%)</div>'+al.map(a=>'<div style="padding:3px 0;display:flex;gap:8px;"><span>v</span><span>'+a.nombre+' - '+a.n+' de '+a.total+' ejecutivos bajo 50% ('+a.pct+'%)</span></div>').join('')+'</div>':'<div style="font-size:12px;color:var(--gn);margin-bottom:10px;">Sin alertas - ningún criterio supera el umbral colectivo.</div>';
     const cB=DB.criterios.map((c,ci)=>{const scores=evs.map(e=>e.criterios?e.criterios[ci]:0);const a2=scores.length?Math.round(scores.reduce((s,v)=>s+v,0)/scores.length):0;return'<div class="mr"><span class="ml">'+c.nombre+'</span><div class="mt"><div class="mf" style="width:'+a2+'%;background:'+CC[ci]+'"></div></div><span class="mp">'+a2+'%</span></div>';}).join('');
-    h+='<div class="oc"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap;"><div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:12px;color:var(--t2);">'+ejs.length+' ejecutivos | '+evs.length+' evaluados | '+cob+'% cobertura</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;">'+sBd(avg)+'<span class="badge bg">'+sol+' solidos</span>'+(at?'<span class="badge br">'+at+' atencion</span>':'')+'</div></div>'+alH+'<div style="font-size:12px;color:var(--t2);margin-bottom:6px;font-weight:500;">Promedio por criterio</div>'+cB+'</div>';
+    h+='<div class="oc"><div style="display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:14px;flex-wrap:wrap;"><div><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:12px;color:var(--t2);">'+ejs.length+' ejecutivos | '+evs.length+' evaluados | '+cob+'% cobertura</div></div><div style="display:flex;gap:8px;flex-wrap:wrap;">'+sBd(avg)+'<span class="badge bg">'+sol+' sólidos</span>'+(at?'<span class="badge br">'+at+' atención</span>':'')+'</div></div>'+alH+'<div style="font-size:12px;color:var(--t2);margin-bottom:6px;font-weight:500;">Promedio por criterio</div>'+cB+'</div>';
   });
   document.getElementById('ofv').innerHTML=h||'<div class="empty">Sin datos para este mes</div>';
 }
@@ -699,10 +699,10 @@ function addOf(){
   }
 }
 function dEj(id){
-  if(!confirm('Eliminar este ejecutivo y todas sus evaluaciones?'))return;
+  if(!confirm('Eliminar este ejecutivo y todas sus evaluaciónes?'))return;
   // Remove from local DB
   DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);
-  DB.evaluaciones=DB.evaluaciones.filter(e=>e.ejecutivo!==id);
+  DB.evaluaciónes=DB.evaluaciónes.filter(e=>e.ejecutivo!==id);
   save();
   // Update selects and views
   lES();rAdmin();
@@ -710,9 +710,9 @@ function dEj(id){
     // Soft delete ejecutivo
     SB.from('ejecutivos').update({activo:false}).eq('id',id)
       .then(({error})=>{if(error)console.error('Error eliminando ejecutivo:',error);});
-    // Delete evaluaciones from Supabase
-    SB.from('evaluaciones').delete().eq('ejecutivo_id',id)
-      .then(({error})=>{if(error)console.error('Error eliminando evaluaciones:',error);});
+    // Delete evaluaciónes from Supabase
+    SB.from('evaluaciónes').delete().eq('ejecutivo_id',id)
+      .then(({error})=>{if(error)console.error('Error eliminando evaluaciónes:',error);});
   }
 }
 function openAE(){
