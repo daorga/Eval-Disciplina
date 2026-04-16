@@ -233,7 +233,7 @@ let chip='todos';
 let DB=JSON.parse(localStorage.getItem('dc_db')||'null')||{
   oficinas:[{id:'o1',nombre:'Monterrey Norte'},{id:'o2',nombre:'Monterrey Sur'},{id:'o3',nombre:'Guadalajara Centro'},{id:'o4',nombre:'CDMX Insurgentes'},{id:'o5',nombre:'CDMX Santa Fe'},{id:'o6',nombre:'Puebla'},{id:'o7',nombre:'Leon'},{id:'o8',nombre:'Queretaro'},{id:'o9',nombre:'Tijuana'},{id:'o10',nombre:'Hermosillo'}],
   ejecutivos:[{id:'e1',nombre:'Ana Martinez',oficina:'o1'},{id:'e2',nombre:'Carlos Reyes',oficina:'o1'},{id:'e3',nombre:'Sofia Torres',oficina:'o2'},{id:'e4',nombre:'Javier Medina',oficina:'o2'},{id:'e5',nombre:'Laura Sanchez',oficina:'o3'},{id:'e6',nombre:'Roberto Cruz',oficina:'o3'},{id:'e7',nombre:'Patricia Vargas',oficina:'o4'},{id:'e8',nombre:'Miguel Angel Flores',oficina:'o4'},{id:'e9',nombre:'Daniela Lopez',oficina:'o5'},{id:'e10',nombre:'Fernando Gomez',oficina:'o5'},{id:'e11',nombre:'Valeria Hernandez',oficina:'o6'},{id:'e12',nombre:'Andres Castillo',oficina:'o7'}],
-  evaluaciónes:[
+  evaluaciones:[
     {id:'ev1',ejecutivo:'e1',mes:'2025-03',score:72,criterios:[80,60,70,100,80,50],notas:'',guardada:true,detalle:[[true,false,true,true],[true,false,true,false],[true,true,false],[true,true,false,false],[true,true,false,true],[false,true,false,true]]},
     {id:'ev2',ejecutivo:'e1',mes:'2025-04',score:81,criterios:[90,80,70,100,80,65],notas:'',guardada:true,detalle:[[true,true,true,true],[true,true,true,false],[true,true,false],[true,true,true,false],[true,true,true,false],[false,true,true,true]]},
     {id:'ev3',ejecutivo:'e2',mes:'2025-04',score:68,criterios:[70,70,50,80,70,70],notas:'',guardada:true,detalle:[[true,false,true,true],[true,true,true,false],[true,false,false],[true,true,true,false],[true,false,true,true],[true,true,false,true]]},
@@ -314,7 +314,7 @@ async function sbInit(){
     }
 
     // 3. Evaluaciónes
-    const {data:evs, error:eEv} = await SB.from('evaluaciónes').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
+    const {data:evs, error:eEv} = await SB.from('evaluaciones').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
     if(eEv) throw eEv;
     if(evs && evs.length){
       DB.evaluaciones = evs.map(ev=>({
@@ -346,7 +346,7 @@ async function sbInit(){
 async function sbSaveEval(obj){
   if(!SB) return;
   try {
-    const {data, error} = await SB.from('evaluaciónes').upsert({
+    const {data, error} = await SB.from('evaluaciones').upsert({
       ejecutivo_id: obj.ejecutivo,
       mes: obj.mes,
       score: obj.score,
@@ -492,7 +492,7 @@ function lE(){
     document.getElementById('enotas').value=ex.notas||'';
   }else{document.getElementById('enotas').value='';}
   const prev=gPrev(ejId,mes);
-  document.getElementById('eprev').innerHTML=prev?'Previo: <b>'+mL(prev.mes)+'</b> '+sBd(prev.score):'Sin evaluaciónes previas';
+  document.getElementById('eprev').innerHTML=prev?'Previo: <b>'+mL(prev.mes)+'</b> '+sBd(prev.score):'Sin evaluaciones previas';
   rESc();
 }
 function rESc(){
@@ -614,7 +614,7 @@ function rEvo(){
     const last=evs[evs.length-1];
     h+='<div class="ec"><div class="eh"><div class="en">'+ej.nombre+'</div><div class="eof">'+gOf(ej.oficina).nombre+'</div>'+sBd(last.score)+'</div><div class="emo">'+bars+'</div></div>';
   });
-  document.getElementById('evlist').innerHTML=h||'<div class="empty">Sin evaluaciónes registradas</div>';
+  document.getElementById('evlist').innerHTML=h||'<div class="empty">Sin evaluaciones registradas</div>';
 }
 
 function rOf(){
@@ -702,7 +702,7 @@ function addOf(){
   }
 }
 function dEj(id){
-  if(!confirm('Eliminar este ejecutivo y todas sus evaluaciónes?'))return;
+  if(!confirm('Eliminar este ejecutivo y todas sus evaluaciones?'))return;
   // Remove from local DB
   DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);
   DB.evaluaciones=DB.evaluaciones.filter(e=>e.ejecutivo!==id);
@@ -713,9 +713,9 @@ function dEj(id){
     // Soft delete ejecutivo
     SB.from('ejecutivos').update({activo:false}).eq('id',id)
       .then(({error})=>{if(error)console.error('Error eliminando ejecutivo:',error);});
-    // Delete evaluaciónes from Supabase
-    SB.from('evaluaciónes').delete().eq('ejecutivo_id',id)
-      .then(({error})=>{if(error)console.error('Error eliminando evaluaciónes:',error);});
+    // Delete evaluaciones from Supabase
+    SB.from('evaluaciones').delete().eq('ejecutivo_id',id)
+      .then(({error})=>{if(error)console.error('Error eliminando evaluaciones:',error);});
   }
 }
 function openAE(){
