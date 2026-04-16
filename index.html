@@ -454,7 +454,6 @@ function rD(){
     '<div class="sc g"><div class="sv">'+sol+'</div><div class="sl">Disciplina sólida</div></div>';
   let lista=DB.ejecutivos;
   if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
-  if(of)lista=lista.filter(e=>e.oficina===of);
   if(offF)lista=lista.filter(e=>e.oficina===offF);
   if(chip==='evaluados')lista=lista.filter(e=>em[e.id]&&em[e.id].guardada);
   if(chip==='pendientes')lista=lista.filter(e=>!em[e.id]);
