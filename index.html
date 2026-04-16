@@ -586,7 +586,13 @@ function rEvo(){
   const s=document.getElementById('evof');
   s.innerHTML='<option value="">Todas las oficinas</option>';
   DB.oficinas.forEach(o=>s.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
-  const ms=['2025-01','2025-02','2025-03','2025-04','2025-05','2025-06'];
+  // Generar últimos 6 meses dinámicamente a partir del mes actual
+  const _now=new Date();
+  const ms=[];
+  for(let i=5;i>=0;i--){
+    const d=new Date(_now.getFullYear(),_now.getMonth()-i,1);
+    ms.push(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+  }
   let lista=DB.ejecutivos;
   if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
   if(of)lista=lista.filter(e=>e.oficina===of);
