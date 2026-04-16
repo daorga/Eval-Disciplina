@@ -317,7 +317,7 @@ async function sbInit(){
     const {data:evs, error:eEv} = await SB.from('evaluaciónes').select('id,ejecutivo_id,mes,score,scores_criterios,notas,guardada,detalle_checks,bancos_sel');
     if(eEv) throw eEv;
     if(evs && evs.length){
-      DB.evaluaciónes = evs.map(ev=>({
+      DB.evaluaciones = evs.map(ev=>({
         id: ev.id,
         ejecutivo: ev.ejecutivo_id,
         mes: ev.mes,
@@ -328,9 +328,9 @@ async function sbInit(){
         detalle: ev.detalle_checks||null,
         bancos: ev.bancos_sel||null
       }));
-      console.log('Evaluaciónes cargadas:', DB.evaluaciónes.length);
+      console.log('Evaluaciónes cargadas:', DB.evaluaciones.length);
     } else {
-      DB.evaluaciónes = [];
+      DB.evaluaciones = [];
     }
 
     save();
@@ -358,8 +358,8 @@ async function sbSaveEval(obj){
       bancos_sel: obj.bancos
     }, {onConflict:'ejecutivo_id,mes'}).select('id').single();
     if(error) throw error;
-    const idx = DB.evaluaciónes.findIndex(e=>e.ejecutivo===obj.ejecutivo&&e.mes===obj.mes);
-    if(idx>=0) DB.evaluaciónes[idx].id = data.id;
+    const idx = DB.evaluaciones.findIndex(e=>e.ejecutivo===obj.ejecutivo&&e.mes===obj.mes);
+    if(idx>=0) DB.evaluaciones[idx].id = data.id;
     save();
     console.log('Evaluación guardada en Supabase:', data.id);
   } catch(e){
@@ -395,8 +395,8 @@ async function sbAddEjecutivo(nombre, oficina_id){
 }
 function gOf(id){return DB.oficinas.find(o=>o.id===id)||{nombre:'?'};}
 function gEj(id){return DB.ejecutivos.find(e=>e.id===id)||{nombre:'?'};}
-function gEv(ejId,mes){return DB.evaluaciónes.find(e=>e.ejecutivo===ejId&&e.mes===mes);}
-function gPrev(ejId,mes){return DB.evaluaciónes.filter(e=>e.ejecutivo===ejId&&e.mes<mes&&e.guardada).sort((a,b)=>b.mes.localeCompare(a.mes))[0];}
+function gEv(ejId,mes){return DB.evaluaciones.find(e=>e.ejecutivo===ejId&&e.mes===mes);}
+function gPrev(ejId,mes){return DB.evaluaciones.filter(e=>e.ejecutivo===ejId&&e.mes<mes&&e.guardada).sort((a,b)=>b.mes.localeCompare(a.mes))[0];}
 function mL(m){const[y,mo]=m.split('-');return MN[parseInt(mo)-1]+' '+y;}
 function sc(s){return s>=80?'#1A7A52':s>=60?'#8A5C00':'#A52A2A';}
 function sBd(s){
@@ -425,15 +425,18 @@ function sC(v){
 
 function rD(){
   const mes=document.getElementById('dm').value;
-  const of=document.getElementById('dof').value;
   const q=(document.getElementById('dq').value||'').toLowerCase();
   const cur=document.getElementById('dof').value;
   const ofS=document.getElementById('dof');
   ofS.innerHTML='<option value="">Todas las oficinas</option>';
   DB.oficinas.forEach(o=>ofS.innerHTML+='<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
-  const evs=DB.evaluaciónes.filter(e=>e.mes===mes);
-  const em={};evs.forEach(e=>{em[e.ejecutivo]=e;});
-  const tot=DB.ejecutivos.length;
+  const offF=document.getElementById('dof').value;
+  const ejFiltrados=offF?DB.ejecutivos.filter(e=>e.oficina===offF):DB.ejecutivos;
+  const ejIds=new Set(ejFiltrados.map(e=>e.id));
+  const evsAll=DB.evaluaciones.filter(e=>e.mes===mes);
+  const evs=evsAll.filter(e=>ejIds.has(e.ejecutivo));
+  const em={};evsAll.forEach(e=>{em[e.ejecutivo]=e;});
+  const tot=ejFiltrados.length;
   const evd=evs.filter(e=>e.guardada).length;
   const tr=evs.filter(e=>!e.guardada).length;
   const pend=tot-evd-tr;
@@ -452,6 +455,7 @@ function rD(){
   let lista=DB.ejecutivos;
   if(q)lista=lista.filter(e=>e.nombre.toLowerCase().includes(q));
   if(of)lista=lista.filter(e=>e.oficina===of);
+  if(offF)lista=lista.filter(e=>e.oficina===offF);
   if(chip==='evaluados')lista=lista.filter(e=>em[e.id]&&em[e.id].guardada);
   if(chip==='pendientes')lista=lista.filter(e=>!em[e.id]);
   if(chip==='truncos')lista=lista.filter(e=>em[e.id]&&!em[e.id].guardada);
@@ -517,9 +521,9 @@ function autoSave(){
   const ejId=document.getElementById('eej').value;
   const mes=document.getElementById('emes').value;
   if(!ejId)return;
-  const idx=DB.evaluaciónes.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
-  const obj={id:idx>=0?DB.evaluaciónes[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score:null,criterios:null,notas:document.getElementById('enotas').value,guardada:false,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
-  if(idx>=0)DB.evaluaciónes[idx]=obj;else DB.evaluaciónes.push(obj);
+  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score:null,criterios:null,notas:document.getElementById('enotas').value,guardada:false,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
   save();
   if(USE_SUPABASE) sbSaveEval(obj);
 }
@@ -567,9 +571,9 @@ function guardar(){
     cS.push(Math.round((mp/tp)*100));tot+=(mp/tp)*c.peso;
   });
   const score=Math.round(tot);
-  const idx=DB.evaluaciónes.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
-  const obj={id:idx>=0?DB.evaluaciónes[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score,criterios:cS,notas,guardada:true,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
-  if(idx>=0)DB.evaluaciónes[idx]=obj;else DB.evaluaciónes.push(obj);
+  const idx=DB.evaluaciones.findIndex(e=>e.ejecutivo===ejId&&e.mes===mes);
+  const obj={id:idx>=0?DB.evaluaciones[idx].id:'ev'+Date.now(),ejecutivo:ejId,mes,score,criterios:cS,notas,guardada:true,detalle:ES.c.map(r=>[...r]),bancos:ES.b.map(r=>[...r])};
+  if(idx>=0)DB.evaluaciones[idx]=obj;else DB.evaluaciones.push(obj);
   save();
   if(USE_SUPABASE) sbSaveEval(obj);
   const bajas=DB.criterios.filter((_,ci)=>cS[ci]<50).map(c=>c.nombre);
@@ -598,7 +602,7 @@ function rEvo(){
   if(of)lista=lista.filter(e=>e.oficina===of);
   let h='';
   lista.forEach(ej=>{
-    const evs=DB.evaluaciónes.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
+    const evs=DB.evaluaciones.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
     if(!evs.length)return;
     const em={};evs.forEach(e=>em[e.mes]=e);
     console.log('Ejecutivo:', ej.nombre, '| Meses en DB:', evs.map(e=>e.mes), '| Meses buscados:', ms);
@@ -621,7 +625,7 @@ function rOf(){
   DB.oficinas.forEach(of=>{
     const ejs=DB.ejecutivos.filter(e=>e.oficina===of.id);
     if(!ejs.length)return;
-    const evs=ejs.map(e=>DB.evaluaciónes.find(ev=>ev.ejecutivo===e.id&&ev.mes===mes&&ev.guardada)).filter(Boolean);
+    const evs=ejs.map(e=>DB.evaluaciones.find(ev=>ev.ejecutivo===e.id&&ev.mes===mes&&ev.guardada)).filter(Boolean);
     if(!evs.length){h+='<div class="oc"><div style="font-size:15px;font-weight:600;margin-bottom:4px;">'+of.nombre+'</div><div style="font-size:13px;color:var(--t2);">'+ejs.length+' ejecutivos - ninguno evaluado en '+mL(mes)+'</div></div>';return;}
     const avg=Math.round(evs.reduce((s,e)=>s+e.score,0)/evs.length);
     const sol=evs.filter(e=>e.score>=80).length;
@@ -702,7 +706,7 @@ function dEj(id){
   if(!confirm('Eliminar este ejecutivo y todas sus evaluaciónes?'))return;
   // Remove from local DB
   DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);
-  DB.evaluaciónes=DB.evaluaciónes.filter(e=>e.ejecutivo!==id);
+  DB.evaluaciones=DB.evaluaciones.filter(e=>e.ejecutivo!==id);
   save();
   // Update selects and views
   lES();rAdmin();
