@@ -601,6 +601,7 @@ function rEvo(){
     const evs=DB.evaluaciones.filter(e=>e.ejecutivo===ej.id&&e.guardada).sort((a,b)=>a.mes.localeCompare(b.mes));
     if(!evs.length)return;
     const em={};evs.forEach(e=>em[e.mes]=e);
+    console.log('Ejecutivo:', ej.nombre, '| Meses en DB:', evs.map(e=>e.mes), '| Meses buscados:', ms);
     const bars=ms.map(m=>{
       const ev=em[m];
       if(!ev)return'<div class="em"><div class="ebw"><div class="eb" style="height:0;background:var(--s2)"></div></div><div class="ev" style="color:var(--t3)">-</div><div class="em2">'+MN[parseInt(m.split('-')[1])-1]+'</div></div>';
