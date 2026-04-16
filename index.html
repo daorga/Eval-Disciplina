@@ -460,6 +460,7 @@ function rD(){
   if(chip==='truncos')lista=lista.filter(e=>em[e.id]&&!em[e.id].guardada);
   document.getElementById('tl').textContent='Ejecutivos ('+lista.length+')';
   let h='';
+  console.log('Lista para tabla:', lista.length, lista.map(e=>({id:e.id,nombre:e.nombre,oficina:e.oficina})));
   lista.forEach(ej=>{
     const ev=em[ej.id];
     const prev=gPrev(ej.id,mes);
