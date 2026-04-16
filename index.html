@@ -652,7 +652,14 @@ function rAdmin(){
   document.getElementById('adcr').innerHTML=ch;
 }
 
-function uOf(id,v){const o=DB.oficinas.find(o=>o.id===id);if(o){o.nombre=v;save();if(USE_SUPABASE)sbSaveOficina(id,v);}}
+function uOf(id,v){
+  const limpio=v.trim();
+  if(!limpio) return;
+  const dupe=DB.oficinas.find(o=>o.id!==id&&o.nombre.toLowerCase()===limpio.toLowerCase());
+  if(dupe){ alert('Ya existe una oficina llamada "'+dupe.nombre+'". Elige otro nombre.'); renderAdmin(); return; }
+  const o=DB.oficinas.find(o=>o.id===id);
+  if(o){o.nombre=limpio;save();if(USE_SUPABASE)sbSaveOficina(id,limpio);}
+}
 function uEjN(id,v){const e=DB.ejecutivos.find(e=>e.id===id);if(e){e.nombre=v;save();if(USE_SUPABASE)sbSaveEjecutivo(id,v,e.oficina);}}
 function uEjO(id,v){const e=DB.ejecutivos.find(e=>e.id===id);if(e){e.oficina=v;save();if(USE_SUPABASE)sbSaveEjecutivo(id,e.nombre,v);}}
 function uCN(ci,v){DB.criterios[ci].nombre=v;save();}
@@ -665,15 +672,28 @@ function addBI(ci,ei){DB.criterios[ci].evidencias[ei].banco.push('Nueva pregunta
 function addEv(ci){DB.criterios[ci].evidencias.push({texto:'Nueva evidencia',tipo:'fija',pts:5,banco:[]});save();rAdmin();}
 function dEv(ci,ei){DB.criterios[ci].evidencias.splice(ei,1);save();rAdmin();}
 function addOf(){
+  const nombre = prompt('Nombre de la nueva oficina:','');
+  if(!nombre||!nombre.trim()) return;
+  const limpio = nombre.trim();
+  const existe = DB.oficinas.find(o=>o.nombre.toLowerCase()===limpio.toLowerCase());
+  if(existe){ alert('Ya existe una oficina con ese nombre: "'+existe.nombre+'"'); return; }
   if(USE_SUPABASE){
-    sbAddOficina('Nueva oficina').then(id=>{
-      if(id){DB.oficinas.push({id,nombre:'Nueva oficina'});save();rAdmin();}
+    sbAddOficina(limpio).then(id=>{
+      if(id){DB.oficinas.push({id,nombre:limpio});save();rAdmin();}
     });
   } else {
-    DB.oficinas.push({id:'o'+Date.now(),nombre:'Nueva oficina'});save();rAdmin();
+    DB.oficinas.push({id:'o'+Date.now(),nombre:limpio});save();rAdmin();
   }
 }
-function dEj(id){if(!confirm('Eliminar este ejecutivo?'))return;DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);save();rAdmin();}
+function dEj(id){
+  if(!confirm('Eliminar este ejecutivo?'))return;
+  DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);
+  save();rAdmin();
+  if(USE_SUPABASE){
+    SB.from('ejecutivos').update({activo:false}).eq('id',id)
+      .then(({error})=>{ if(error) console.error('Error eliminando ejecutivo:', error); });
+  }
+}
 function openAE(){
   const s=document.getElementById('nejof');
   s.innerHTML=DB.oficinas.map(o=>'<option value="'+o.id+'">'+o.nombre+'</option>').join('');
