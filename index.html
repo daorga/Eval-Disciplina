@@ -202,7 +202,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
 
 <div class="vw" id="vw-admin">
   <div class="pt">Administracion</div><div class="ps">Haz clic en cualquier texto para editarlo directamente</div>
-  <div class="as"><div class="ash"><span class="ast">Oficinas</span><button class="btn btn-sm" onclick="addOf()">+ Agregar</button></div><div id="adof"></div></div>
+  <div class="as"><div class="ash"><span class="ast">Oficinas</span><div style="display:flex;gap:8px;align-items:center;"><input class="inp" id="nueva-of" placeholder="Nombre de la oficina..." style="width:220px;" onkeydown="if(event.key==='Enter')addOf()"><button class="btn btn-sm btn-p" onclick="addOf()">+ Agregar</button></div></div><div id="adof"></div></div>
   <div class="as"><div class="ash"><span class="ast">Ejecutivos</span><button class="btn btn-sm" onclick="openAE()">+ Agregar</button></div><div id="adej"></div></div>
   <div class="as"><div class="ash"><span class="ast">Criterios y banco de preguntas</span></div><div id="adcr"></div></div>
 </div>
@@ -672,26 +672,40 @@ function addBI(ci,ei){DB.criterios[ci].evidencias[ei].banco.push('Nueva pregunta
 function addEv(ci){DB.criterios[ci].evidencias.push({texto:'Nueva evidencia',tipo:'fija',pts:5,banco:[]});save();rAdmin();}
 function dEv(ci,ei){DB.criterios[ci].evidencias.splice(ei,1);save();rAdmin();}
 function addOf(){
-  const nombre = prompt('Nombre de la nueva oficina:','');
-  if(!nombre||!nombre.trim()) return;
-  const limpio = nombre.trim();
-  const existe = DB.oficinas.find(o=>o.nombre.toLowerCase()===limpio.toLowerCase());
-  if(existe){ alert('Ya existe una oficina con ese nombre: "'+existe.nombre+'"'); return; }
+  const el=document.getElementById('nueva-of');
+  if(!el)return;
+  const limpio=(el.value||'').trim();
+  if(!limpio){el.focus();return;}
+  const existe=DB.oficinas.find(o=>o.nombre.toLowerCase()===limpio.toLowerCase());
+  if(existe){
+    el.style.borderColor='var(--rd)';
+    el.title='Ya existe: '+existe.nombre;
+    setTimeout(()=>{el.style.borderColor='';el.title='';},2000);
+    return;
+  }
   if(USE_SUPABASE){
     sbAddOficina(limpio).then(id=>{
-      if(id){DB.oficinas.push({id,nombre:limpio});save();rAdmin();}
+      if(id){DB.oficinas.push({id,nombre:limpio});save();el.value='';rAdmin();}
     });
   } else {
-    DB.oficinas.push({id:'o'+Date.now(),nombre:limpio});save();rAdmin();
+    DB.oficinas.push({id:'o'+Date.now(),nombre:limpio});save();el.value='';rAdmin();
   }
 }
 function dEj(id){
-  if(!confirm('Eliminar este ejecutivo?'))return;
+  if(!confirm('Eliminar este ejecutivo y todas sus evaluaciones?'))return;
+  // Remove from local DB
   DB.ejecutivos=DB.ejecutivos.filter(e=>e.id!==id);
-  save();rAdmin();
+  DB.evaluaciones=DB.evaluaciones.filter(e=>e.ejecutivo!==id);
+  save();
+  // Update selects and views
+  lES();rAdmin();
   if(USE_SUPABASE){
+    // Soft delete ejecutivo
     SB.from('ejecutivos').update({activo:false}).eq('id',id)
-      .then(({error})=>{ if(error) console.error('Error eliminando ejecutivo:', error); });
+      .then(({error})=>{if(error)console.error('Error eliminando ejecutivo:',error);});
+    // Delete evaluaciones from Supabase
+    SB.from('evaluaciones').delete().eq('ejecutivo_id',id)
+      .then(({error})=>{if(error)console.error('Error eliminando evaluaciones:',error);});
   }
 }
 function openAE(){
