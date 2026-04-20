@@ -208,10 +208,12 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
   <!-- REGISTRO NUEVA SESIÓN -->
   <div style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:20px;">
     <div style="font-size:14px;font-weight:600;margin-bottom:14px;">Registrar sesión</div>
-    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;position:relative;">
       <div style="flex:1;min-width:200px;">
         <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Ejecutivo</label>
-        <select class="sel" style="width:100%;" id="ac-ej" onchange="acLoadPrev()"><option value="">— Selecciona —</option></select>
+        <input class="inp" style="width:100%;" id="ac-ej-search" placeholder="Escribe nombre..." oninput="acFilterEj(this.value)" autocomplete="off">
+        <input type="hidden" id="ac-ej">
+        <div id="ac-ej-dropdown" style="display:none;position:absolute;background:var(--surface);border:1px solid var(--bd2);border-radius:var(--rs);max-height:200px;overflow-y:auto;z-index:50;width:280px;box-shadow:0 4px 12px rgba(0,0,0,.1);"></div>
       </div>
       <div>
         <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Fecha</label>
@@ -836,12 +838,10 @@ let acChipVal = 'todos';
 let acCumplioVal = null;
 
 function acInit(){
-  // populate selects
-  const sel = document.getElementById('ac-ej');
-  sel.innerHTML = '<option value="">— Selecciona —</option>';
-  DB.ejecutivos.forEach(e => {
-    sel.innerHTML += '<option value="'+e.id+'">'+e.nombre+' — '+gOf(e.oficina).nombre+'</option>';
-  });
+  // clear search field on init
+  const searchEl = document.getElementById('ac-ej-search');
+  if(searchEl){ searchEl.value = ''; }
+  document.getElementById('ac-ej').value = '';
   const ofS = document.getElementById('ac-of-filter');
   const cur = ofS.value;
   ofS.innerHTML = '<option value="">Todas las oficinas</option>';
@@ -851,6 +851,35 @@ function acInit(){
   document.getElementById('ac-fecha').value = today;
   acRender();
 }
+
+function acFilterEj(q){
+  const drop = document.getElementById('ac-ej-dropdown');
+  if(!q||q.length<2){ drop.style.display='none'; return; }
+  const matches = DB.ejecutivos.filter(e=>e.nombre.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(!matches.length){ drop.style.display='none'; return; }
+  drop.innerHTML = matches.map(e=>`
+    <div onclick="acSelectEj('${e.id}','${e.nombre}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:0.5px solid var(--bd);"
+      onmouseover="this.style.background='var(--s2)'" onmouseout="this.style.background=''">
+      <div style="font-weight:500;">${e.nombre}</div>
+      <div style="font-size:11px;color:var(--t2);">${gOf(e.oficina).nombre}</div>
+    </div>`).join('');
+  drop.style.display='block';
+}
+
+function acSelectEj(id, nombre){
+  document.getElementById('ac-ej').value = id;
+  document.getElementById('ac-ej-search').value = nombre;
+  document.getElementById('ac-ej-dropdown').style.display='none';
+  acLoadPrev();
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(e){
+  if(!e.target.closest || (!e.target.id || e.target.id !== 'ac-ej-search')){
+    const drop = document.getElementById('ac-ej-dropdown');
+    if(drop) drop.style.display='none';
+  }
+});
 
 function acLoadPrev(){
   const ejId = document.getElementById('ac-ej').value;
