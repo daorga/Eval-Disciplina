@@ -852,10 +852,15 @@ function acInit(){
   acRender();
 }
 
+function normalize(s){
+  return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+}
+
 function acFilterEj(q){
   const drop = document.getElementById('ac-ej-dropdown');
-  if(!q||q.length<2){ drop.style.display='none'; return; }
-  const matches = DB.ejecutivos.filter(e=>e.nombre.toLowerCase().includes(q.toLowerCase())).slice(0,8);
+  if(!q||q.length<1){ drop.style.display='none'; return; }
+  const qn = normalize(q);
+  const matches = DB.ejecutivos.filter(e=>normalize(e.nombre).includes(qn)).slice(0,10);
   if(!matches.length){ drop.style.display='none'; return; }
   drop.innerHTML = matches.map(e=>`
     <div onclick="acSelectEj('${e.id}','${e.nombre}')" style="padding:8px 12px;cursor:pointer;font-size:13px;border-bottom:0.5px solid var(--bd);"
