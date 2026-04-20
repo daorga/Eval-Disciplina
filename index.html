@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Disciplina Comercial</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://unpkg.com/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 :root{--bg:#F5F4F0;--surface:#FFF;--s2:#EFEDE8;--bd:rgba(0,0,0,.08);--bd2:rgba(0,0,0,.14);--t:#1A1916;--t2:#6B6860;--t3:#9E9C97;--acc:#1A1916;--gn:#1A7A52;--gn2:#E8F5EE;--am:#8A5C00;--am2:#FDF3DC;--rd:#A52A2A;--rd2:#FAEAEA;--pu:#4A2A8A;--pu2:#F0EAFA;--r:12px;--rs:8px;}
@@ -121,6 +121,7 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
     <button class="ntb" onclick="sv('evolución')">Evolución</button>
     <button class="ntb" onclick="sv('oficinas')">Por oficina</button>
     <button class="ntb" onclick="sv('admin')">Administración</button>
+    <button class="ntb" onclick="sv('acomp')">Acompañamiento</button>
   </div>
   <div style="font-size:13px;color:var(--t2)">Cuarto de Control</div>
 </nav>
@@ -198,6 +199,77 @@ tr:last-child td{border-bottom:none;}tr:hover td{background:#FAFAF8;}
     </label>
   </div>
   <div id="ofv"></div>
+</div>
+
+<div class="vw" id="vw-acomp">
+  <div class="pt">Acompañamiento</div>
+  <div class="ps">Registro de sesiones semanales y seguimiento de compromisos</div>
+
+  <!-- REGISTRO NUEVA SESIÓN -->
+  <div style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--r);padding:18px;margin-bottom:20px;">
+    <div style="font-size:14px;font-weight:600;margin-bottom:14px;">Registrar sesión</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end;">
+      <div style="flex:1;min-width:200px;">
+        <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Ejecutivo</label>
+        <select class="sel" style="width:100%;" id="ac-ej" onchange="acLoadPrev()"><option value="">— Selecciona —</option></select>
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Fecha</label>
+        <input type="date" class="inp" id="ac-fecha">
+      </div>
+      <div>
+        <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Registrado por</label>
+        <input class="inp" id="ac-quien" placeholder="Tu nombre" style="width:160px;">
+      </div>
+    </div>
+
+    <!-- COMPROMISO ANTERIOR -->
+    <div id="ac-prev-wrap" style="display:none;margin-top:14px;background:var(--bg);border-radius:var(--rs);padding:12px 14px;">
+      <div style="font-size:12px;color:var(--t2);margin-bottom:8px;font-weight:500;">Compromiso de la sesión anterior</div>
+      <div style="font-size:13px;color:var(--t);margin-bottom:10px;" id="ac-prev-texto">—</div>
+      <div style="font-size:12px;color:var(--t2);margin-bottom:6px;">¿Lo cumplió?</div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-sm" id="ac-si" onclick="acSetCumplio(true)" style="flex:1;">Sí</button>
+        <button class="btn btn-sm" id="ac-no" onclick="acSetCumplio(false)" style="flex:1;">No</button>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Compromiso de esta sesión</label>
+      <input class="inp" id="ac-compromiso" placeholder="Específico, con nombre de agente y fecha si aplica..." style="width:100%;">
+    </div>
+    <div style="margin-top:10px;">
+      <label style="font-size:12px;color:var(--t2);display:block;margin-bottom:6px;">Notas (opcional)</label>
+      <input class="inp" id="ac-notas" placeholder="Observaciones de la sesión..." style="width:100%;">
+    </div>
+    <div style="display:flex;justify-content:flex-end;margin-top:14px;">
+      <button class="btn btn-p" onclick="acGuardar()">Guardar sesión</button>
+    </div>
+  </div>
+
+  <!-- FILTROS AVANCE -->
+  <div class="fr" style="margin-bottom:16px;">
+    <select class="sel" id="ac-of-filter" onchange="acRender()"><option value="">Todas las oficinas</option></select>
+    <input class="inp" placeholder="Buscar ejecutivo..." oninput="acRender()" id="ac-q" style="width:200px;">
+    <button class="chip active" id="ac-chip-todos" onclick="acChip('todos')">Todos</button>
+    <button class="chip" id="ac-chip-alerta" onclick="acChip('alerta')">Sin sesión +14 días</button>
+    <button class="chip" id="ac-chip-ok" onclick="acChip('ok')">Al día</button>
+  </div>
+
+  <!-- TABLA AVANCE -->
+  <div class="tw">
+    <div class="th2"><span class="tt" id="ac-tl">Ejecutivos con acompañamiento</span></div>
+    <table><thead><tr>
+      <th>Ejecutivo</th><th>Oficina</th><th>Sesiones este mes</th><th>Última sesión</th><th>Último compromiso</th><th>Estado</th>
+    </tr></thead><tbody id="ac-tbody"></tbody></table>
+  </div>
+
+  <!-- HISTORIAL -->
+  <div id="ac-historial-wrap" style="display:none;margin-top:20px;">
+    <div style="font-size:14px;font-weight:600;margin-bottom:12px;" id="ac-hist-title">Historial</div>
+    <div id="ac-hist-list"></div>
+    <button class="btn btn-sm" onclick="acCloseHist()" style="margin-top:8px;">Cerrar historial</button>
+  </div>
 </div>
 
 <div class="vw" id="vw-admin">
@@ -336,6 +408,7 @@ async function sbInit(){
     save();
     rD();
     lES();
+    await acLoadFromSB();
     console.log('Supabase conectado OK');
   } catch(e){
     console.error('Error Supabase detalle:', JSON.stringify(e), e.message, e.code, e.details);
@@ -415,6 +488,7 @@ function sv(id){
   if(id==='evolución')rEvo();
   if(id==='oficinas')rOf();
   if(id==='admin')rAdmin();
+  if(id==='acomp')acInit();
 }
 
 function sC(v){
@@ -756,6 +830,214 @@ const _mesActual = _hoy.getFullYear()+'-'+String(_hoy.getMonth()+1).padStart(2,'
     }
   }
 });
+
+// ── ACOMPAÑAMIENTO ────────────────────────────────────────────────────────
+let acChipVal = 'todos';
+let acCumplioVal = null;
+
+function acInit(){
+  // populate selects
+  const sel = document.getElementById('ac-ej');
+  sel.innerHTML = '<option value="">— Selecciona —</option>';
+  DB.ejecutivos.forEach(e => {
+    sel.innerHTML += '<option value="'+e.id+'">'+e.nombre+' — '+gOf(e.oficina).nombre+'</option>';
+  });
+  const ofS = document.getElementById('ac-of-filter');
+  const cur = ofS.value;
+  ofS.innerHTML = '<option value="">Todas las oficinas</option>';
+  DB.oficinas.forEach(o => ofS.innerHTML += '<option value="'+o.id+'"'+(o.id===cur?' selected':'')+'>'+o.nombre+'</option>');
+  // set today
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('ac-fecha').value = today;
+  acRender();
+}
+
+function acLoadPrev(){
+  const ejId = document.getElementById('ac-ej').value;
+  if(!ejId){ document.getElementById('ac-prev-wrap').style.display='none'; return; }
+  const hist = (DB.acompañamientos||[]).filter(a=>a.ejecutivo===ejId).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  if(hist.length){
+    document.getElementById('ac-prev-wrap').style.display='block';
+    document.getElementById('ac-prev-texto').textContent = hist[0].compromiso_nuevo || '—';
+    acCumplioVal = null;
+    document.getElementById('ac-si').style.background='';
+    document.getElementById('ac-no').style.background='';
+  } else {
+    document.getElementById('ac-prev-wrap').style.display='none';
+  }
+}
+
+function acSetCumplio(val){
+  acCumplioVal = val;
+  document.getElementById('ac-si').style.background = val ? 'var(--gn2)' : '';
+  document.getElementById('ac-si').style.color = val ? 'var(--gn)' : '';
+  document.getElementById('ac-no').style.background = !val ? 'var(--rd2)' : '';
+  document.getElementById('ac-no').style.color = !val ? 'var(--rd)' : '';
+}
+
+function acGuardar(){
+  const ejId = document.getElementById('ac-ej').value;
+  const fecha = document.getElementById('ac-fecha').value;
+  const compromiso = document.getElementById('ac-compromiso').value.trim();
+  const notas = document.getElementById('ac-notas').value.trim();
+  const quien = document.getElementById('ac-quien').value.trim() || 'Cuarto de Control';
+  if(!ejId) return alert('Selecciona un ejecutivo');
+  if(!fecha) return alert('Selecciona la fecha');
+  if(!compromiso) return alert('Ingresa el compromiso de la sesión');
+
+  const hist = (DB.acompañamientos||[]).filter(a=>a.ejecutivo===ejId).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  const prevComp = hist.length ? hist[0].compromiso_nuevo : null;
+
+  const obj = {
+    id: 'ac'+Date.now(),
+    ejecutivo: ejId,
+    fecha,
+    cumplio_anterior: hist.length ? acCumplioVal : null,
+    compromiso_anterior: prevComp,
+    compromiso_nuevo: compromiso,
+    notas,
+    registrado_por: quien
+  };
+
+  if(!DB.acompañamientos) DB.acompañamientos = [];
+  DB.acompañamientos.push(obj);
+  save();
+
+  if(USE_SUPABASE){
+    SB.from('acompañamientos').insert({
+      ejecutivo_id: ejId,
+      fecha,
+      cumplio_anterior: hist.length ? acCumplioVal : null,
+      compromiso_anterior: prevComp,
+      compromiso_nuevo: compromiso,
+      notas,
+      registrado_por: quien
+    }).then(({error})=>{ if(error) console.error('Error guardando acompañamiento:', error); });
+  }
+
+  // reset form
+  document.getElementById('ac-compromiso').value = '';
+  document.getElementById('ac-notas').value = '';
+  document.getElementById('ac-prev-wrap').style.display = 'none';
+  acCumplioVal = null;
+  acRender();
+  alert('Sesión registrada correctamente');
+}
+
+function acChip(v){
+  acChipVal = v;
+  ['todos','alerta','ok'].forEach(c=>{
+    document.getElementById('ac-chip-'+c).classList.toggle('active', c===v);
+  });
+  acRender();
+}
+
+function acRender(){
+  const of = document.getElementById('ac-of-filter').value;
+  const q = (document.getElementById('ac-q').value||'').toLowerCase();
+  const now = new Date();
+  const mesActual = now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0');
+  const hoy = now.toISOString().split('T')[0];
+
+  let lista = DB.ejecutivos;
+  if(of) lista = lista.filter(e=>e.oficina===of);
+  if(q) lista = lista.filter(e=>e.nombre.toLowerCase().includes(q));
+
+  const acomps = DB.acompañamientos || [];
+
+  // filter by chip
+  lista = lista.filter(ej=>{
+    const hist = acomps.filter(a=>a.ejecutivo===ej.id).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    const last = hist[0];
+    const diasDesde = last ? Math.floor((new Date(hoy)-new Date(last.fecha))/(1000*60*60*24)) : 999;
+    if(acChipVal==='alerta') return diasDesde > 14;
+    if(acChipVal==='ok') return diasDesde <= 14;
+    return true;
+  });
+
+  document.getElementById('ac-tl').textContent = 'Ejecutivos con acompañamiento ('+lista.length+')';
+
+  let h = '';
+  lista.forEach(ej=>{
+    const hist = acomps.filter(a=>a.ejecutivo===ej.id).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+    const enMes = hist.filter(a=>a.fecha.startsWith(mesActual)).length;
+    const last = hist[0];
+    const diasDesde = last ? Math.floor((new Date(hoy)-new Date(last.fecha))/(1000*60*60*24)) : null;
+    const estado = diasDesde===null
+      ? '<span class="badge bgr">Sin sesiones</span>'
+      : diasDesde > 14
+      ? '<span class="badge br">'+diasDesde+' días sin sesión</span>'
+      : '<span class="badge bg">Al día</span>';
+    const ultimaFecha = last ? last.fecha : '—';
+    const ultimoComp = last ? '<span style="font-size:12px;color:var(--t2);">'+last.compromiso_nuevo.substring(0,50)+(last.compromiso_nuevo.length>50?'...':'')+'</span>' : '—';
+
+    h += '<tr>'
+      +'<td style="font-weight:500">'+ej.nombre+'</td>'
+      +'<td>'+gOf(ej.oficina).nombre+'</td>'
+      +'<td style="font-size:13px;">'+enMes+'</td>'
+      +'<td style="font-size:12px;color:var(--t2);">'+ultimaFecha+'</td>'
+      +'<td>'+ultimoComp+'</td>'
+      +'<td>'+estado+'</td>'
+      +'<td><button class="btn btn-sm" onclick="acVerHist(this.dataset.id)" data-id="'+ej.id+'">Ver historial</button></td>'
+      +'</tr>';
+  });
+  document.getElementById('ac-tbody').innerHTML = h || '<tr><td colspan="7" class="empty">Sin resultados</td></tr>';
+}
+
+function acVerHist(ejId){
+  const ej = gEj(ejId);
+  const hist = (DB.acompañamientos||[]).filter(a=>a.ejecutivo===ejId).sort((a,b)=>b.fecha.localeCompare(a.fecha));
+  document.getElementById('ac-hist-title').textContent = 'Historial — '+ej.nombre;
+  let h = '';
+  if(!hist.length){ h = '<div class="empty">Sin sesiones registradas</div>'; }
+  else {
+    hist.forEach(a=>{
+      const cumplio = a.cumplio_anterior===null ? '' : a.cumplio_anterior
+        ? '<span class="badge bg" style="font-size:10px;">Cumplió</span>'
+        : '<span class="badge br" style="font-size:10px;">No cumplió</span>';
+      h += '<div style="background:var(--surface);border:1px solid var(--bd);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;">'
+        +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+        +'<span style="font-size:12px;font-weight:500;">'+a.fecha+'</span>'
+        +cumplio
+        +'<span style="font-size:11px;color:var(--t3);margin-left:auto;">'+a.registrado_por+'</span>'
+        +'</div>'
+        +(a.compromiso_anterior?'<div style="font-size:11px;color:var(--t3);margin-bottom:4px;">Compromiso anterior: '+a.compromiso_anterior+'</div>':'')
+        +'<div style="font-size:13px;color:var(--t);"><b style="font-weight:500;font-size:11px;color:var(--t2);">Compromiso: </b>'+a.compromiso_nuevo+'</div>'
+        +(a.notas?'<div style="font-size:11px;color:var(--t3);margin-top:4px;">'+a.notas+'</div>':'')
+        +'</div>';
+    });
+  }
+  document.getElementById('ac-hist-list').innerHTML = h;
+  document.getElementById('ac-historial-wrap').style.display = 'block';
+  document.getElementById('ac-historial-wrap').scrollIntoView({behavior:'smooth'});
+}
+
+function acCloseHist(){
+  document.getElementById('ac-historial-wrap').style.display = 'none';
+}
+
+// Load acompañamientos from Supabase on init
+async function acLoadFromSB(){
+  if(!SB) return;
+  try {
+    const {data, error} = await SB.from('acompañamientos').select('id,ejecutivo_id,fecha,cumplio_anterior,compromiso_anterior,compromiso_nuevo,notas,registrado_por').order('fecha',{ascending:false});
+    if(error) throw error;
+    if(data && data.length){
+      DB.acompañamientos = data.map(a=>({
+        id: a.id,
+        ejecutivo: a.ejecutivo_id,
+        fecha: a.fecha,
+        cumplio_anterior: a.cumplio_anterior,
+        compromiso_anterior: a.compromiso_anterior,
+        compromiso_nuevo: a.compromiso_nuevo,
+        notas: a.notas||'',
+        registrado_por: a.registrado_por||'Cuarto de Control'
+      }));
+      save();
+    }
+  } catch(e){ console.error('Error cargando acompañamientos:', e); }
+}
+
 lES();rD();
 document.getElementById('eempty').style.display='block';
 if(USE_SUPABASE) sbInit();
